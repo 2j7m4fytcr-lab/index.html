@@ -1,0 +1,2715 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سیستم ارتقای سطح مطالعه | Shadow Monarch Study System • Dark Monarch Edition • V6 Study First</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Vazirmatn -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;600;800;900&display=swap" rel="stylesheet">
+    <!-- React & ReactDOM CDN -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+    <!-- Babel standalone -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        system: {
+                            bg: '#03050c',
+                            cyan: '#00f0ff',
+                            blue: '#0072ff',
+                            danger: '#ff0055',
+                            monarch: '#a855f7',
+                            monarchDark: '#3b0764',
+                            gold: '#ffd700'
+                        }
+                    },
+                    boxShadow: {
+                        'neon-blue': '0 0 15px rgba(0, 240, 255, 0.45), inset 0 0 12px rgba(0, 240, 255, 0.2)',
+                        'neon-strong': '0 0 30px rgba(0, 240, 255, 0.75), 0 0 60px rgba(0, 114, 255, 0.4)',
+                        'neon-monarch': '0 0 25px rgba(168, 85, 247, 0.65), inset 0 0 15px rgba(168, 85, 247, 0.25)',
+                        'neon-red': '0 0 20px rgba(255, 0, 85, 0.7), inset 0 0 10px rgba(255, 0, 85, 0.3)',
+                        'neon-gold': '0 0 20px rgba(255, 215, 0, 0.6)'
+                    },
+                    animation: {
+                        'float': 'float 3.5s ease-in-out infinite',
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'arise': 'ariseAnim 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-7px)' }
+                        },
+                        ariseAnim: {
+                            '0%': { opacity: '0', transform: 'scale(0.85) translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'scale(1) translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #03050c;
+            color: #e2e8f0;
+            background-image: 
+                radial-gradient(circle at 20% 10%, rgba(0, 114, 255, 0.14) 0%, transparent 50%),
+                radial-gradient(circle at 80% 90%, rgba(168, 85, 247, 0.14) 0%, transparent 55%),
+                linear-gradient(to bottom, #03050c, #070d1f);
+            background-attachment: fixed;
+            font-family: 'Vazirmatn', sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Holographic System Panels */
+        .system-panel {
+            background: rgba(7, 16, 36, 0.78);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid rgba(0, 240, 255, 0.32);
+            box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.65), inset 0 0 18px rgba(0, 240, 255, 0.08);
+            position: relative;
+        }
+
+        /* Corner Accents for Sci-Fi Look */
+        .system-panel::before, .system-panel::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            border-color: #00f0ff;
+            pointer-events: none;
+        }
+        .system-panel::before {
+            top: -1px; right: -1px;
+            border-top: 2px solid #00f0ff;
+            border-right: 2px solid #00f0ff;
+            border-top-right-radius: 12px;
+        }
+        .system-panel::after {
+            bottom: -1px; left: -1px;
+            border-bottom: 2px solid #00f0ff;
+            border-left: 2px solid #00f0ff;
+            border-bottom-left-radius: 12px;
+        }
+
+        .monarch-panel {
+            background: rgba(24, 9, 44, 0.8);
+            backdrop-filter: blur(14px);
+            border: 1px solid rgba(168, 85, 247, 0.45);
+            box-shadow: 0 10px 35px 0 rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(168, 85, 247, 0.15);
+        }
+
+        .system-panel-danger {
+            background: rgba(38, 6, 15, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 0, 85, 0.6);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.7), inset 0 0 18px rgba(255, 0, 85, 0.25);
+        }
+
+        /* Text Glows */
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.75), 0 0 22px rgba(0, 114, 255, 0.5);
+        }
+        .glow-text-monarch {
+            text-shadow: 0 0 10px rgba(168, 85, 247, 0.85), 0 0 25px rgba(139, 92, 246, 0.6);
+        }
+        .glow-text-red {
+            text-shadow: 0 0 10px rgba(255, 0, 85, 0.85), 0 0 22px rgba(255, 0, 85, 0.5);
+        }
+        .glow-text-gold {
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.85);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: rgba(4, 9, 22, 0.9); }
+        ::-webkit-scrollbar-thumb { background: #00f0ff; border-radius: 3px; box-shadow: 0 0 8px #00f0ff; }
+
+        /* Scanlines */
+        .scanline-bg {
+            background: linear-gradient(
+                to bottom,
+                rgba(255,255,255,0),
+                rgba(255,255,255,0) 50%,
+                rgba(0, 240, 255, 0.025) 50%,
+                rgba(0, 240, 255, 0.025)
+            );
+            background-size: 100% 4px;
+        }
+
+        /* ===== SHADOW SYSTEM : CINEMATIC HUD UPGRADE ===== */
+        :root {
+            --hud-cyan: #55dfff;
+            --hud-blue: #347bff;
+            --hud-violet: #8b6cff;
+            --hud-ink: #030611;
+            --hud-line: rgba(105, 190, 255, .28);
+        }
+
+        html { scroll-behavior: smooth; }
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(ellipse at 50% -15%, rgba(31, 91, 178, .26), transparent 42%),
+                radial-gradient(ellipse at 92% 42%, rgba(73, 41, 151, .15), transparent 36%),
+                radial-gradient(ellipse at 4% 78%, rgba(0, 119, 181, .12), transparent 34%),
+                linear-gradient(155deg, #02040b 0%, #050a18 48%, #080817 100%);
+            background-attachment: fixed;
+            letter-spacing: .01em;
+        }
+        body::before {
+            content: "";
+            position: fixed; inset: 0; z-index: -1; pointer-events: none;
+            opacity: .23;
+            background-image:
+                linear-gradient(rgba(77, 159, 255, .075) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(77, 159, 255, .075) 1px, transparent 1px);
+            background-size: 54px 54px;
+            mask-image: linear-gradient(to bottom, black, transparent 88%);
+        }
+        body::after {
+            content: "";
+            position: fixed; inset: 0; z-index: 40; pointer-events: none;
+            opacity: .18;
+            background: repeating-linear-gradient(to bottom,
+                transparent 0px, transparent 3px,
+                rgba(135, 202, 255, .045) 4px);
+            mix-blend-mode: screen;
+        }
+        #root { isolation: isolate; }
+        #root > div { position: relative; }
+        #root > div::before {
+            content: "SYSTEM INTERFACE  /  PLAYER TERMINAL";
+            position: absolute; top: 2px; left: 8px;
+            color: rgba(130, 196, 255, .35);
+            font: 700 8px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace;
+            letter-spacing: .22em; direction: ltr; pointer-events: none;
+        }
+
+        .system-panel, .monarch-panel, .system-panel-danger {
+            border-radius: 14px !important;
+            backdrop-filter: blur(18px) saturate(135%);
+            -webkit-backdrop-filter: blur(18px) saturate(135%);
+            overflow: hidden;
+            transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease;
+        }
+        .system-panel {
+            background:
+                linear-gradient(135deg, rgba(10, 25, 49, .94), rgba(4, 10, 24, .91) 62%, rgba(7, 18, 37, .94));
+            border: 1px solid rgba(91, 190, 255, .34);
+            box-shadow: 0 18px 55px rgba(0,0,0,.48),
+                inset 0 1px 0 rgba(183, 224, 255, .09),
+                inset 0 0 35px rgba(18, 107, 185, .08);
+        }
+        .system-panel:hover {
+            border-color: rgba(99, 210, 255, .56);
+            box-shadow: 0 20px 60px rgba(0,0,0,.52),
+                0 0 24px rgba(0, 164, 255, .08),
+                inset 0 0 35px rgba(18, 107, 185, .1);
+        }
+        .monarch-panel {
+            background: linear-gradient(135deg, rgba(29, 17, 58, .96), rgba(7, 9, 26, .95) 65%, rgba(22, 13, 43, .96));
+            border: 1px solid rgba(164, 126, 255, .55);
+            box-shadow: 0 18px 60px rgba(0,0,0,.55),
+                inset 0 1px 0 rgba(220, 205, 255, .1),
+                inset 0 0 42px rgba(127, 76, 255, .12);
+        }
+        .system-panel-danger {
+            background: linear-gradient(135deg, rgba(43, 9, 25, .96), rgba(14, 5, 16, .95));
+            border: 1px solid rgba(255, 75, 119, .58);
+            box-shadow: 0 18px 55px rgba(0,0,0,.55), inset 0 0 35px rgba(255,0,85,.1);
+        }
+        .system-panel::before, .system-panel::after {
+            width: 17px; height: 17px; border-color: var(--hud-cyan);
+            filter: drop-shadow(0 0 5px rgba(85,223,255,.7));
+        }
+        .system-panel::before { border-width: 2px 2px 0 0; }
+        .system-panel::after { border-width: 0 0 2px 2px; }
+        .monarch-panel::before, .monarch-panel::after {
+            content: ""; position: absolute; width: 17px; height: 17px;
+            border-color: #b99aff; pointer-events: none;
+            filter: drop-shadow(0 0 6px rgba(168,125,255,.8));
+        }
+        .monarch-panel::before { top: -1px; right: -1px; border-top: 2px solid; border-right: 2px solid; }
+        .monarch-panel::after { bottom: -1px; left: -1px; border-bottom: 2px solid; border-left: 2px solid; }
+
+        .glow-text { text-shadow: 0 0 8px rgba(64,205,255,.8), 0 0 24px rgba(0,114,255,.36); }
+        .glow-text-monarch { text-shadow: 0 0 9px rgba(181,143,255,.9), 0 0 27px rgba(123,74,255,.52); }
+        .glow-text-gold { text-shadow: 0 0 10px rgba(255,215,0,.75); }
+
+        button {
+            position: relative;
+            overflow: hidden;
+            transition: transform .18s ease, filter .18s ease, box-shadow .18s ease !important;
+        }
+        button:not(:disabled):hover { transform: translateY(-1px); filter: brightness(1.12); }
+        button:not(:disabled):active { transform: translateY(1px) scale(.985); }
+        button:focus-visible, input:focus-visible {
+            outline: 2px solid rgba(85,223,255,.9) !important;
+            outline-offset: 3px;
+        }
+        input, select, textarea {
+            color-scheme: dark;
+            transition: border-color .2s ease, box-shadow .2s ease;
+        }
+        input:focus, select:focus, textarea:focus {
+            box-shadow: 0 0 0 3px rgba(0, 191, 255, .1), 0 0 18px rgba(0, 191, 255, .08);
+        }
+
+        nav {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(79, 191, 255, .6) transparent;
+        }
+        nav button { letter-spacing: .015em; }
+        nav button[class*="bg-cyan-950"], nav button[class*="bg-purple-950"] {
+            box-shadow: inset 0 -2px 0 rgba(92,218,255,.75), 0 0 20px rgba(0,180,255,.1);
+        }
+        .animate-float { animation-duration: 4.8s; }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #6be5ff, #3679ff);
+            border-radius: 8px; box-shadow: 0 0 9px rgba(0,190,255,.55);
+        }
+
+        @keyframes hud-sweep {
+            0% { transform: translateX(-120%) skewX(-18deg); opacity: 0; }
+            15% { opacity: .55; }
+            55% { opacity: .18; }
+            100% { transform: translateX(240%) skewX(-18deg); opacity: 0; }
+        }
+        header.system-panel::after, header.monarch-panel::after {
+            width: 42%; height: 1px; bottom: auto; left: -45%; top: 0;
+            border: 0; background: linear-gradient(90deg, transparent, rgba(125,225,255,.85), transparent);
+            animation: hud-sweep 8s ease-in-out infinite;
+        }
+        header { box-shadow: 0 22px 75px rgba(0,0,0,.5), inset 0 1px 0 rgba(200,230,255,.08) !important; }
+        footer { letter-spacing: .08em; }
+
+        @media (max-width: 640px) {
+            #root > div { padding-left: 12px; padding-right: 12px; }
+            .system-panel, .monarch-panel { border-radius: 12px !important; }
+            body::before { background-size: 38px 38px; }
+            #root > div::before { font-size: 7px; top: 0; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+        }
+
+
+        /* ===== V4.2 CONSISTENT HOLOGRAPHIC SYSTEM LANGUAGE ===== */
+        .system-kicker { display:flex; align-items:center; gap:9px; margin-bottom:9px; color:#73dfff; font:800 9px/1.4 ui-monospace,monospace; letter-spacing:.2em; direction:ltr; }
+        .system-kicker::before,.system-kicker::after { content:""; height:1px; background:linear-gradient(90deg,transparent,#43cfff); flex:1; opacity:.55; }
+        .dungeon-rank-card { position:relative; overflow:hidden; isolation:isolate; background:linear-gradient(145deg,rgba(9,31,66,.94),rgba(5,13,32,.98) 65%); border-color:rgba(70,151,208,.42); box-shadow:inset 0 0 20px rgba(37,144,210,.07); }
+        .dungeon-rank-card::before { content:"";position:absolute;inset:5px;border:1px solid rgba(100,204,255,.12);pointer-events:none; }
+        .dungeon-rank-card::after { content:"";position:absolute;top:0;left:-70%;width:45%;height:100%;background:linear-gradient(90deg,transparent,rgba(125,220,255,.12),transparent);transform:skewX(-18deg);transition:left .55s ease;pointer-events:none; }
+        .dungeon-rank-card:hover::after,.dungeon-rank-selected::after { left:130%; }
+        .dungeon-rank-selected { border-color:#67e8ff!important;box-shadow:0 0 0 1px rgba(83,215,255,.25),0 0 25px rgba(0,166,255,.25),inset 0 0 28px rgba(0,179,255,.13)!important; }
+        .dungeon-rank-card .border-t { border-color:rgba(119,190,230,.2); }
+        .solo-system-modal { position:relative;overflow:hidden;border:1px solid rgba(103,220,255,.82)!important;background:radial-gradient(ellipse at 50% 0%,rgba(69,157,255,.24),transparent 60%),linear-gradient(145deg,#0d2c55,#08152f 62%,#0b2148)!important;box-shadow:0 0 0 2px rgba(44,153,255,.1),0 0 30px rgba(30,155,255,.22),inset 0 0 30px rgba(66,167,255,.12); }
+        .solo-system-modal::before { content:"";position:absolute;inset:6px;border:1px solid rgba(109,210,255,.2);pointer-events:none; }
+        .solo-system-modal > * { position:relative; }
+        .solo-system-modal .system-modal-label { color:#7de7ff;font:900 9px/1.4 ui-monospace,monospace;letter-spacing:.2em;direction:ltr;margin-bottom:9px; }
+        .solo-system-modal-danger { border-color:rgba(255,105,130,.85)!important;background:radial-gradient(ellipse at 50% 0%,rgba(255,70,95,.22),transparent 60%),linear-gradient(145deg,#42182f,#17132e 65%,#32172e)!important; }
+        .solo-system-modal-gold { border-color:rgba(255,213,105,.9)!important;background:radial-gradient(ellipse at 50% 0%,rgba(255,190,67,.22),transparent 60%),linear-gradient(145deg,#453619,#171d39 65%,#29345a)!important; }
+        .solo-system-modal-monarch { border-color:rgba(190,143,255,.9)!important;background:radial-gradient(ellipse at 50% 0%,rgba(160,95,255,.25),transparent 60%),linear-gradient(145deg,#30205f,#101a3d 65%,#24164d)!important; }
+        .solo-system-modal .bg-slate-950\/90,.solo-system-modal .bg-amber-950\/50,.solo-system-modal .bg-amber-950\/40 { background:rgba(3,10,27,.62)!important;border-color:rgba(115,204,255,.25)!important; }
+        @media(max-width:640px){.dungeon-rank-card{padding:15px!important}.solo-system-modal{border-radius:5px!important}}
+
+        /* ===== SOLO LEVELING BLUE SYSTEM ALARM WINDOWS ===== */
+        .solo-alarm {
+            --alarm-accent: #65e8ff;
+            position: relative; overflow: hidden; isolation: isolate;
+            padding: 19px 24px 15px; text-align: center;
+            color: #f2f8ff; border: 1px solid rgba(103,220,255,.92);
+            background:
+              radial-gradient(ellipse at 50% 0%, rgba(69,157,255,.34), transparent 65%),
+              linear-gradient(145deg, rgba(12,48,94,.98), rgba(7,23,57,.985) 54%, rgba(10,38,83,.98));
+            box-shadow: 0 0 0 2px rgba(44,153,255,.13), 0 0 24px rgba(30,155,255,.4), inset 0 0 28px rgba(66,167,255,.22);
+            animation: alarm-arrive .38s cubic-bezier(.2,.8,.2,1) both;
+            clip-path: polygon(0 15px,15px 0,calc(100% - 15px) 0,100% 15px,100% calc(100% - 15px),calc(100% - 15px) 100%,15px 100%,0 calc(100% - 15px));
+        }
+        .solo-alarm::before { content:""; position:absolute; inset:5px; border:1px solid rgba(109,210,255,.23); pointer-events:none; z-index:-1; }
+        .solo-alarm::after { content:""; position:absolute; inset:0; pointer-events:none; opacity:.16; background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(160,220,255,.18) 4px); }
+        .alarm-quest { --alarm-accent:#7de8ff; border-color:rgba(125,232,255,.98); background:radial-gradient(ellipse at 50% 0%,rgba(48,211,255,.34),transparent 65%),linear-gradient(145deg,#103c63,#101b3d 58%,#102d54); }
+        .alarm-danger { --alarm-accent:#ff667e; border-color:rgba(255,105,130,.9); background:radial-gradient(ellipse at 50% 0%,rgba(255,70,95,.28),transparent 65%),linear-gradient(145deg,#4b1837,#1a102d 58%,#39152e); }
+        .alarm-reward { --alarm-accent:#ffd66e; border-color:rgba(255,213,105,.9); background:radial-gradient(ellipse at 50% 0%,rgba(255,190,67,.25),transparent 65%),linear-gradient(145deg,#4b3a19,#171d39 58%,#26335b); }
+        .alarm-monarch { --alarm-accent:#c6a0ff; border-color:rgba(190,143,255,.9); background:radial-gradient(ellipse at 50% 0%,rgba(160,95,255,.3),transparent 65%),linear-gradient(145deg,#30205f,#101a3d 58%,#24164d); }
+        .alarm-heading { position:relative; display:flex; justify-content:center; align-items:center; gap:9px; color:#f6fbff; font:900 18px/1.2 'Vazirmatn',sans-serif; letter-spacing:.07em; text-shadow:0 0 12px var(--alarm-accent); }
+        .alarm-symbol { display:inline-flex; align-items:center; justify-content:center; width:20px;height:20px;border:1.5px solid var(--alarm-accent);border-radius:50%;color:var(--alarm-accent);font:900 14px/1 sans-serif;box-shadow:0 0 10px color-mix(in srgb,var(--alarm-accent),transparent 35%); }
+        .alarm-rule { height:1px; margin:13px 16px 11px; background:linear-gradient(90deg,transparent,var(--alarm-accent),transparent);box-shadow:0 0 9px var(--alarm-accent);opacity:.8; }
+        .alarm-title { color:var(--alarm-accent);font-size:14px;font-weight:900;line-height:1.7;text-shadow:0 0 12px color-mix(in srgb,var(--alarm-accent),transparent 50%); }
+        .alarm-message { max-width:480px;margin:7px auto 2px;color:#e6f0ff;font-size:13px;line-height:1.9;font-weight:600;text-shadow:0 1px 5px #07142e; }
+        .alarm-footer { display:flex;justify-content:space-between;gap:10px;margin-top:13px;padding-top:8px;border-top:1px solid rgba(157,208,255,.18);color:rgba(182,218,255,.55);font:700 8px/1.4 ui-monospace,monospace;letter-spacing:.13em;direction:ltr; }
+        .alarm-close { position:absolute;top:7px;right:12px;z-index:2;color:rgba(220,240,255,.65);font-size:20px;line-height:1;padding:2px 5px; }
+        .alarm-close:hover { color:white;text-shadow:0 0 9px white; }
+        .alarm-corner { position:absolute;width:17px;height:17px;border-color:var(--alarm-accent);opacity:.9;pointer-events:none; }
+        .alarm-corner-tl { top:0;left:0;border-top:2px solid;border-left:2px solid; }
+        .alarm-corner-tr { top:0;right:0;border-top:2px solid;border-right:2px solid; }
+        .alarm-corner-bl { bottom:0;left:0;border-bottom:2px solid;border-left:2px solid; }
+        .alarm-corner-br { bottom:0;right:0;border-bottom:2px solid;border-right:2px solid; }
+        @keyframes alarm-arrive { from { opacity:0;transform:translateY(-14px) scale(.97);filter:blur(4px); } to { opacity:1;transform:translateY(0) scale(1);filter:blur(0); } }
+        @media(max-width:640px) { .solo-alarm{padding:17px 18px 13px;border-radius:3px;}.alarm-heading{font-size:16px}.alarm-message{font-size:12px}.alarm-title{font-size:13px} }
+
+
+        /* V6.1 NIGHTFALL PURPLE THEME */
+        body {
+            background-color: #05020d !important;
+            background-image:
+                radial-gradient(ellipse at 50% -12%, rgba(126, 34, 206, .30) 0%, transparent 46%),
+                radial-gradient(ellipse at 92% 38%, rgba(91, 33, 182, .20) 0%, transparent 38%),
+                radial-gradient(ellipse at 5% 82%, rgba(49, 25, 105, .24) 0%, transparent 40%),
+                linear-gradient(145deg, #03020a 0%, #090515 42%, #10091f 76%, #05030d 100%) !important;
+            background-attachment: fixed !important;
+        }
+        body::before {
+            opacity: .19;
+            background-image:
+                linear-gradient(rgba(167, 139, 250, .065) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(167, 139, 250, .065) 1px, transparent 1px);
+        }
+        body::after { opacity: .12; }
+        .system-panel {
+            background: linear-gradient(135deg, rgba(24, 14, 48, .96), rgba(8, 7, 24, .95) 62%, rgba(18, 10, 36, .96)) !important;
+            border-color: rgba(153, 113, 230, .38) !important;
+            box-shadow: 0 18px 55px rgba(0,0,0,.55), inset 0 1px 0 rgba(220,205,255,.07), inset 0 0 35px rgba(124,58,237,.09) !important;
+        }
+        .system-panel:hover { border-color: rgba(192, 132, 252, .62) !important; }
+        .monarch-panel {
+            background: linear-gradient(135deg, rgba(42, 20, 75, .97), rgba(12, 8, 29, .97) 65%, rgba(35, 15, 59, .97)) !important;
+            border-color: rgba(192, 132, 252, .62) !important;
+        }
+    </style>
+</head>
+<body class="min-h-screen scanline-bg text-slate-100 flex flex-col justify-between selection:bg-cyan-500 selection:text-black">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect, useRef } = React;
+
+        // --- Advanced Web Audio Synthesizer ---
+        const playSystemSound = (type) => {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                if (!AudioContext) return;
+                const ctx = new AudioContext();
+                const now = ctx.currentTime;
+
+                if (type === 'click') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(880, now);
+                    osc.frequency.exponentialRampToValueAtTime(440, now + 0.05);
+                    gain.gain.setValueAtTime(0.12, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'levelUp') {
+                    const freqs = [523.25, 659.25, 783.99, 1046.50, 1318.51, 1567.98];
+                    freqs.forEach((f, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'triangle';
+                        osc.frequency.setValueAtTime(f, now + idx * 0.07);
+                        gain.gain.setValueAtTime(0.2, now + idx * 0.07);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.07 + 0.35);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.07);
+                        osc.stop(now + idx * 0.07 + 0.35);
+                    });
+                } else if (type === 'arise') {
+                    const bass = ctx.createOscillator();
+                    const bassGain = ctx.createGain();
+                    bass.type = 'sawtooth';
+                    bass.frequency.setValueAtTime(110, now);
+                    bass.frequency.exponentialRampToValueAtTime(45, now + 0.9);
+                    bassGain.gain.setValueAtTime(0.3, now);
+                    bassGain.gain.exponentialRampToValueAtTime(0.001, now + 0.9);
+                    bass.connect(bassGain);
+                    bassGain.connect(ctx.destination);
+                    bass.start(now);
+                    bass.stop(now + 0.9);
+
+                    const chime = ctx.createOscillator();
+                    const chimeGain = ctx.createGain();
+                    chime.type = 'sine';
+                    chime.frequency.setValueAtTime(440, now + 0.2);
+                    chime.frequency.exponentialRampToValueAtTime(880, now + 0.8);
+                    chimeGain.gain.setValueAtTime(0.15, now + 0.2);
+                    chimeGain.gain.exponentialRampToValueAtTime(0.001, now + 0.85);
+                    chime.connect(chimeGain);
+                    chimeGain.connect(ctx.destination);
+                    chime.start(now + 0.2);
+                    chime.stop(now + 0.85);
+                } else if (type === 'complete') {
+                    const notes = [440, 554.37, 659.25, 880];
+                    notes.forEach((f, idx) => {
+                        const osc = ctx.createOscillator();
+                        const gain = ctx.createGain();
+                        osc.type = 'sine';
+                        osc.frequency.setValueAtTime(f, now + idx * 0.09);
+                        gain.gain.setValueAtTime(0.16, now + idx * 0.09);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.09 + 0.25);
+                        osc.connect(gain);
+                        gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.09);
+                        osc.stop(now + idx * 0.09 + 0.25);
+                    });
+                } else if (type === 'quest') {
+                    [587.33, 783.99, 987.77].forEach((f, idx) => {
+                        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                        osc.type = 'sine'; osc.frequency.setValueAtTime(f, now + idx * 0.11);
+                        gain.gain.setValueAtTime(0.13, now + idx * 0.11);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.11 + 0.22);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.11); osc.stop(now + idx * 0.11 + 0.22);
+                    });
+                } else if (type === 'reward') {
+                    [783.99, 1046.5, 1318.51].forEach((f, idx) => {
+                        const osc = ctx.createOscillator(); const gain = ctx.createGain();
+                        osc.type = 'triangle'; osc.frequency.setValueAtTime(f, now + idx * 0.08);
+                        gain.gain.setValueAtTime(0.12, now + idx * 0.08);
+                        gain.gain.exponentialRampToValueAtTime(0.001, now + idx * 0.08 + 0.3);
+                        osc.connect(gain); gain.connect(ctx.destination);
+                        osc.start(now + idx * 0.08); osc.stop(now + idx * 0.08 + 0.3);
+                    });
+                } else if (type === 'warning') {
+                    const osc = ctx.createOscillator();
+                    const gain = ctx.createGain();
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(160, now);
+                    osc.frequency.linearRampToValueAtTime(95, now + 0.45);
+                    gain.gain.setValueAtTime(0.28, now);
+                    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.45);
+                    osc.connect(gain);
+                    gain.connect(ctx.destination);
+                    osc.start(now);
+                    osc.stop(now + 0.45);
+                }
+            } catch (e) {
+                console.log('Audio error', e);
+            }
+        };
+
+        // Initial Data (Deep copy helper used on reset to guarantee clean state)
+        const createDefaultPlayer = () => ({
+            name: '',
+            job: 'دانش‌آموز تازه‌کار',
+            level: 1,
+            xp: 0,
+            maxXp: 100,
+            statPoints: 5,
+            manaCrystals: 150,
+            blessedBoxes: 1,
+            streakDays: 1,
+            stats: {
+                focus: 10,
+                memory: 10,
+                stamina: 10,
+                intelligence: 10,
+                discipline: 10
+            },
+            completedDungeonsCount: 0,
+            totalStudyMinutes: 0
+        });
+
+        const createInitialDailyQuests = () => ([
+            { id: 'd1', title: 'مطالعه عمیق و بدون حواس‌پرتی (حداقل ۶۰ دقیقه)', xp: 50, crystals: 30, completed: false },
+            { id: 'd2', title: 'مرور خلاصه‌ها و نکات کلیدی دیروز', xp: 30, crystals: 15, completed: false },
+            { id: 'd3', title: 'حل ۲۰ تست یا تمرین کاربردی', xp: 40, crystals: 20, completed: false },
+            { id: 'd4', title: 'برنامه‌ریزی اهداف مطالعه فردا', xp: 20, crystals: 10, completed: false }
+        ]);
+
+        const createInitialShopItems = () => ([
+            { id: 's1', title: '۱ ساعت گیمینگ یا استراحت آزاد', cost: 100, icon: 'gamepad-2', desc: 'لذت بردن بدون عذاب وجدان' },
+            { id: 's2', title: 'تماشای ۱ قسمت انیمه / فیلم', cost: 120, icon: 'tv', desc: 'تجربه یک اپیزود هیجان‌انگیز' },
+            { id: 's3', title: 'سفارش خوراکی یا قهوه ویژه', cost: 90, icon: 'coffee', desc: 'تجدید قوا برای نبردهای بعدی' },
+            { id: 's4', title: '۳۰ دقیقه شبکه‌های اجتماعی', cost: 50, icon: 'smartphone', desc: 'گشت‌وگذار آزاد در فضای مجازی' }
+        ]);
+
+        const createInitialQuests = () => ([
+            { id: 'q1', title: 'فتح کامل فصل اول کتاب تخصصی', rank: 'B', xp: 140, crystals: 75, type: 'main', completed: false },
+            { id: 'q2', title: 'حفظ ۳۰ لغت یا فرمول کلیدی', rank: 'D', xp: 50, crystals: 25, type: 'side', completed: false },
+            { id: 'q3', title: 'شبیه‌سازی آزمون جامع پایان هفته', rank: 'S', xp: 350, crystals: 200, type: 'main', completed: false }
+        ]);
+
+        const createInitialShadows = () => ([
+            { id: 'sh1', name: 'ایگریس (شوالیه نظم)', subject: 'برنامه‌ریزی پایه', rank: 'Knight', xpBoost: 3, crystalBoost: 2, level: 1 }
+        ]);
+
+        const createInitialStudyTasks = () => ([
+            { id: 'm1', text: 'یک مبحث مشخص از درس امروز را بخوان', subject: 'ریاضی', done: false },
+            { id: 'm2', text: 'چند تمرین تشریحی حل کن', subject: 'فیزیک', done: false },
+            { id: 'm3', text: 'اشتباهات یا نکات سخت را مرور کن', subject: 'شیمی', done: false }
+        ]);
+
+        const createDefaultPlanData = () => ({
+            subjects: ['ریاضی', 'فیزیک', 'شیمی', 'زیست‌شناسی'],
+            weekly: [],
+            grades: [],
+            completed: {}
+        });
+
+        function App() {
+            const [player, setPlayer] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v2_player');
+                    return saved ? { ...createDefaultPlayer(), ...JSON.parse(saved) } : createDefaultPlayer();
+                } catch { return createDefaultPlayer(); }
+            });
+
+            const [dailyQuests, setDailyQuests] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v2_daily');
+                    return saved ? JSON.parse(saved) : createInitialDailyQuests();
+                } catch { return createInitialDailyQuests(); }
+            });
+
+            const [quests, setQuests] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v2_quests');
+                    return saved ? JSON.parse(saved) : createInitialQuests();
+                } catch { return createInitialQuests(); }
+            });
+
+            const [shopItems, setShopItems] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v2_shop');
+                    return saved ? JSON.parse(saved) : createInitialShopItems();
+                } catch { return createInitialShopItems(); }
+            });
+
+            const [shadows, setShadows] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v2_shadows');
+                    return saved ? JSON.parse(saved) : createInitialShadows();
+                } catch { return createInitialShadows(); }
+            });
+
+            const [studySessions, setStudySessions] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v3_sessions');
+                    return saved ? JSON.parse(saved) : [];
+                } catch { return []; }
+            });
+
+            const [campaign, setCampaign] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v3_campaign');
+                    return saved ? JSON.parse(saved) : {};
+                } catch { return {}; }
+            });
+
+            const [skillTree, setSkillTree] = useState(() => {
+                try { return JSON.parse(localStorage.getItem('sl_v5_skills') || '{}'); } catch { return {}; }
+            });
+
+            const [bossHistory, setBossHistory] = useState(() => {
+                try { return JSON.parse(localStorage.getItem('sl_v5_boss_history') || '[]'); } catch { return []; }
+            });
+
+            const [studyHub, setStudyHub] = useState(() => {
+                try {
+                    const saved = JSON.parse(localStorage.getItem('sl_v6_study_hub') || '{}');
+                    return Array.isArray(saved.tasks) ? saved : { tasks: createInitialStudyTasks() };
+                } catch { return { tasks: createInitialStudyTasks() }; }
+            });
+
+            const [planData, setPlanData] = useState(() => {
+                try {
+                    return { ...createDefaultPlanData(), ...(JSON.parse(localStorage.getItem('sl_v4_plan') || '{}')) };
+                } catch { return createDefaultPlanData(); }
+            });
+
+            const [logs, setLogs] = useState(() => {
+                try {
+                    const saved = localStorage.getItem('sl_v2_logs');
+                    return saved ? JSON.parse(saved) : [
+                        { id: 1, time: 'امروز', text: 'سیستم بیدار شد. شما به عنوان بازیکن انتخاب شدید.', type: 'system' }
+                    ];
+                } catch {
+                    return [{ id: 1, time: 'امروز', text: 'سیستم بیدار شد. شما به عنوان بازیکن انتخاب شدید.', type: 'system' }];
+                }
+            });
+
+            const [penaltyActive, setPenaltyActive] = useState(() => localStorage.getItem('sl_v2_penalty') === 'true');
+            const [activeTab, setActiveTab] = useState('study');
+            const [notifications, setNotifications] = useState([]);
+            const [soundEnabled, setSoundEnabled] = useState(true);
+
+            // Modals
+            const [levelUpModal, setLevelUpModal] = useState(false);
+            const [rewardClaimModal, setRewardClaimModal] = useState(null);
+            const [ariseModal, setAriseModal] = useState(null);
+            const [confirmModal, setConfirmModal] = useState(null);
+            const [boxRewardModal, setBoxRewardModal] = useState(null);
+            const [editingName, setEditingName] = useState(false);
+            const [tempName, setTempName] = useState(player.name);
+
+            // Dungeon Timer State
+            const [dungeon, setDungeon] = useState({
+                active: false,
+                rank: 'E',
+                title: 'سیاه‌چال E-Rank (۲۵ دقیقه)',
+                subject: '',
+                duration: 25 * 60,
+                timeLeft: 25 * 60,
+                isPaused: false,
+                xpReward: 40,
+                crystalReward: 25
+            });
+
+            // Save all state slices reliably to localStorage
+            useEffect(() => { localStorage.setItem('sl_v2_player', JSON.stringify(player)); }, [player]);
+            useEffect(() => { localStorage.setItem('sl_v2_daily', JSON.stringify(dailyQuests)); }, [dailyQuests]);
+            useEffect(() => { localStorage.setItem('sl_v2_quests', JSON.stringify(quests)); }, [quests]);
+            useEffect(() => { localStorage.setItem('sl_v2_shop', JSON.stringify(shopItems)); }, [shopItems]);
+            useEffect(() => { localStorage.setItem('sl_v2_shadows', JSON.stringify(shadows)); }, [shadows]);
+            useEffect(() => { localStorage.setItem('sl_v2_logs', JSON.stringify(logs)); }, [logs]);
+            useEffect(() => { localStorage.setItem('sl_v3_sessions', JSON.stringify(studySessions)); }, [studySessions]);
+            useEffect(() => { localStorage.setItem('sl_v3_campaign', JSON.stringify(campaign)); }, [campaign]);
+            useEffect(() => { localStorage.setItem('sl_v5_skills', JSON.stringify(skillTree)); }, [skillTree]);
+            useEffect(() => { localStorage.setItem('sl_v5_boss_history', JSON.stringify(bossHistory)); }, [bossHistory]);
+            useEffect(() => { localStorage.setItem('sl_v6_study_hub', JSON.stringify(studyHub)); }, [studyHub]);
+            useEffect(() => { localStorage.setItem('sl_v4_plan', JSON.stringify(planData)); }, [planData]);
+            useEffect(() => { localStorage.setItem('sl_v2_penalty', penaltyActive ? 'true' : 'false'); }, [penaltyActive]);
+
+            // Re-render Lucide icons on tab/modal changes
+            useEffect(() => {
+                if (window.lucide) window.lucide.createIcons();
+            });
+
+            const triggerSound = (type) => {
+                if (soundEnabled) playSystemSound(type);
+            };
+
+            const addLog = (text, type = 'info') => {
+                const now = new Date();
+                const timeStr = `${now.getHours().toString().padStart(2, '0')}:${now.getMinutes().toString().padStart(2, '0')}`;
+                setLogs(prev => [{ id: Date.now() + Math.random(), time: timeStr, text, type }, ...prev.slice(0, 49)]);
+            };
+
+            const addNotification = (title, message, type = 'info') => {
+                const id = Date.now() + Math.random();
+                setNotifications(prev => [...prev, { id, title, message, type }]);
+                triggerSound(type === 'warning' ? 'warning' : type === 'quest' ? 'quest' : type === 'success' ? 'reward' : 'click');
+                setTimeout(() => {
+                    setNotifications(prev => prev.filter(n => n.id !== id));
+                }, 6500);
+            };
+
+            // Total Shadow Army Buffs
+            const totalShadowXpBoost = shadows.reduce((acc, s) => acc + s.xpBoost, 0);
+            const totalShadowCrystalBoost = shadows.reduce((acc, s) => acc + s.crystalBoost, 0);
+
+            const getPlayerTitle = (level) => {
+                if (level < 5) return 'شکارچی رتبه E';
+                if (level < 10) return 'جوینده دانش (رتبه D)';
+                if (level < 18) return 'نکرومنسر کتابخانه (رتبه C)';
+                if (level < 30) return 'فرمانده ارتش سایه‌ها (رتبه B)';
+                if (level < 45) return 'حکیم اعظم (رتبه A)';
+                return 'پادشاه سایه‌ها (Shadow Monarch)';
+            };
+
+            const addXPAndCrystals = (xpGained, crystalsGained) => {
+                const focusMult = 1 + (player.stats.focus - 10) * 0.02 + (totalShadowXpBoost / 100) + (Number(skillTree.focus || 0) * 0.02);
+                const finalXP = Math.round(xpGained * Math.max(1, focusMult));
+
+                const intMult = 1 + (player.stats.intelligence - 10) * 0.03 + (totalShadowCrystalBoost / 100) + (Number(skillTree.memory || 0) * 0.02);
+                const finalCrystals = Math.round(crystalsGained * Math.max(1, intMult));
+
+                setPlayer(prev => {
+                    let newXp = prev.xp + finalXP;
+                    let newLevel = prev.level;
+                    let newMaxXp = prev.maxXp;
+                    let newStatPoints = prev.statPoints;
+                    let newJob = prev.job;
+                    let leveledUp = false;
+
+                    while (newXp >= newMaxXp) {
+                        newXp -= newMaxXp;
+                        newLevel += 1;
+                        newMaxXp = Math.round(newMaxXp * 1.25);
+                        newStatPoints += 3;
+                        leveledUp = true;
+                    }
+
+                    if (newLevel >= 30) newJob = 'فرمانروای سایه‌های دانش';
+                    else if (newLevel >= 10) newJob = 'نکرومنسر دانش';
+
+                    if (leveledUp) {
+                        setLevelUpModal(true);
+                        triggerSound('levelUp');
+                        addLog(`ارتقای سطح! رسیدن به سطح ${newLevel}`, 'levelup');
+                        addNotification('[ارتقای سطح سیستم]', `تبریک! به سطح ${newLevel} رسیدید و ۳ امتیاز وضعیت دریافت کردید!`, 'success');
+                    } else {
+                        addNotification('[پاداش سیستم]', `+${finalXP} XP و 💎 ${finalCrystals} سنگ مانا دریافت شد.`, 'info');
+                    }
+
+                    return {
+                        ...prev,
+                        level: newLevel,
+                        job: newJob,
+                        xp: newXp,
+                        maxXp: newMaxXp,
+                        statPoints: newStatPoints,
+                        manaCrystals: prev.manaCrystals + finalCrystals
+                    };
+                });
+            };
+
+            const upgradeStat = (statKey) => {
+                if (player.statPoints <= 0) return;
+                triggerSound('click');
+                setPlayer(prev => ({
+                    ...prev,
+                    statPoints: prev.statPoints - 1,
+                    stats: {
+                        ...prev.stats,
+                        [statKey]: prev.stats[statKey] + 1
+                    }
+                }));
+                addLog(`ویژگی ${getStatNamePersian(statKey)} ارتقا یافت.`);
+            };
+
+            const getStatNamePersian = (key) => {
+                const map = {
+                    focus: 'تمرکز (Focus)',
+                    memory: 'حافظه (Memory)',
+                    stamina: 'استقامت (Stamina)',
+                    intelligence: 'هوش (Intelligence)',
+                    discipline: 'نظم (Discipline)'
+                };
+                return map[key] || key;
+            };
+
+            // Shadow Extraction ("ARISE")
+            const handleAriseShadow = (customShadowName) => {
+                if (!ariseModal) return;
+                triggerSound('arise');
+                const rankMap = {
+                    'E': { rank: 'Soldier', xp: 2, cry: 1 },
+                    'C': { rank: 'Elite', xp: 4, cry: 2 },
+                    'A': { rank: 'Knight', xp: 6, cry: 4 },
+                    'Red Gate': { rank: 'Marshal', xp: 10, cry: 6 }
+                };
+                const info = rankMap[ariseModal.rank] || { rank: 'Soldier', xp: 2, cry: 1 };
+                
+                const newShadow = {
+                    id: 'sh_' + Date.now(),
+                    name: customShadowName || `سایه ${ariseModal.subject}`,
+                    subject: ariseModal.subject,
+                    rank: info.rank,
+                    xpBoost: info.xp,
+                    crystalBoost: info.cry,
+                    level: 1
+                };
+
+                setShadows(prev => [newShadow, ...prev]);
+                addLog(`استخراج سایه موفق: «${newShadow.name}» به ارتش شما پیوست!`, 'arise');
+                addNotification('[ARISE! برخیز]', `سایه «${newShadow.name}» با موفقیت استخراج شد و به ارتش شما پیوست!`, 'monarch');
+                setAriseModal(null);
+            };
+
+            // Open Blessed Random Box
+            const openBlessedBox = () => {
+                if (player.blessedBoxes <= 0) return;
+                triggerSound('levelUp');
+                const rewards = [
+                    { type: 'crystals', amount: 120, label: '💎 ۱۲۰ سنگ مانای خالص' },
+                    { type: 'crystals', amount: 250, label: '💎 ۲۵۰ سنگ مانای سلطنتی' },
+                    { type: 'stats', amount: 2, label: '⚡ +۲ امتیاز وضعیت آزاد' },
+                    { type: 'xp', amount: 150, label: '✨ +۱۵۰ امتیاز تجربه (XP)' }
+                ];
+                const picked = rewards[Math.floor(Math.random() * rewards.length)];
+
+                setPlayer(prev => {
+                    let updated = { ...prev, blessedBoxes: prev.blessedBoxes - 1 };
+                    if (picked.type === 'crystals') updated.manaCrystals += picked.amount;
+                    if (picked.type === 'stats') updated.statPoints += picked.amount;
+                    return updated;
+                });
+
+                if (picked.type === 'xp') {
+                    addXPAndCrystals(picked.amount, 0);
+                }
+
+                addLog(`جعبه برکت باز شد: ${picked.label}`);
+                setBoxRewardModal(picked);
+            };
+
+            // Complete System Reset (Resets EVERYTHING including Skill Tree, Mana Crystals, Player Name, Boss History, Plan, Study Hub, Dungeon)
+            const requestResetSystem = () => {
+                setConfirmModal({
+                    title: '[هشدار بازنشانی سیستم]',
+                    message: 'آیا مطمئن هستید که می‌خواهید تمام سطوح، سنگ‌های مانا، شبکه توانایی‌ها (Skill Tree)، ارتش سایه‌ها و پیشرفت خود را پاک کنید؟ این عملیات غیرقابل بازگشت است.',
+                    danger: true,
+                    onConfirm: () => {
+                        localStorage.clear();
+
+                        const freshPlayer = createDefaultPlayer();
+                        const freshDaily = createInitialDailyQuests();
+                        const freshQuests = createInitialQuests();
+                        const freshShop = createInitialShopItems();
+                        const freshShadows = createInitialShadows();
+                        const freshStudyHub = { tasks: createInitialStudyTasks() };
+                        const freshPlan = createDefaultPlanData();
+                        const freshLogs = [{ id: Date.now(), time: 'اکنون', text: 'سیستم به تنظیمات اولیه بازنشانی شد.', type: 'warning' }];
+
+                        setPlayer(freshPlayer);
+                        setTempName('');
+                        setEditingName(false);
+                        setDailyQuests(freshDaily);
+                        setQuests(freshQuests);
+                        setShopItems(freshShop);
+                        setShadows(freshShadows);
+                        setStudySessions([]);
+                        setCampaign({});
+                        setSkillTree({});
+                        setBossHistory([]);
+                        setStudyHub(freshStudyHub);
+                        setPlanData(freshPlan);
+                        setPenaltyActive(false);
+                        setDungeon({
+                            active: false,
+                            rank: 'E',
+                            title: 'سیاه‌چال E-Rank (۲۵ دقیقه)',
+                            subject: '',
+                            duration: 25 * 60,
+                            timeLeft: 25 * 60,
+                            isPaused: false,
+                            xpReward: 40,
+                            crystalReward: 25
+                        });
+                        setLogs(freshLogs);
+
+                        // Explicitly write initial values back so storage is immediately clean and consistent
+                        localStorage.setItem('sl_v2_player', JSON.stringify(freshPlayer));
+                        localStorage.setItem('sl_v2_daily', JSON.stringify(freshDaily));
+                        localStorage.setItem('sl_v2_quests', JSON.stringify(freshQuests));
+                        localStorage.setItem('sl_v2_shop', JSON.stringify(freshShop));
+                        localStorage.setItem('sl_v2_shadows', JSON.stringify(freshShadows));
+                        localStorage.setItem('sl_v3_sessions', JSON.stringify([]));
+                        localStorage.setItem('sl_v3_campaign', JSON.stringify({}));
+                        localStorage.setItem('sl_v5_skills', JSON.stringify({}));
+                        localStorage.setItem('sl_v5_boss_history', JSON.stringify([]));
+                        localStorage.setItem('sl_v6_study_hub', JSON.stringify(freshStudyHub));
+                        localStorage.setItem('sl_v4_plan', JSON.stringify(freshPlan));
+                        localStorage.setItem('sl_v2_logs', JSON.stringify(freshLogs));
+                        localStorage.setItem('sl_v2_penalty', 'false');
+
+                        setConfirmModal(null);
+                        addNotification('[بازنشانی کامل]', 'تمام اطلاعات، سنگ مانا و شبکه توانایی‌ها به حالت اولیه بازگشت.', 'warning');
+                    }
+                });
+            };
+
+            const savePlayerName = () => {
+                setPlayer(prev => ({ ...prev, name: tempName.trim() }));
+                setEditingName(false);
+            };
+
+            const isMonarch = player.level >= 10;
+
+            return (
+                <div class="min-h-screen flex flex-col justify-between max-w-7xl mx-auto px-3 sm:px-6 py-4">
+                    
+                    {/* TOP SYSTEM HEADER */}
+                    <header class={`rounded-2xl p-4 sm:p-5 mb-6 relative overflow-hidden transition-all ${isMonarch ? 'monarch-panel' : 'system-panel'}`}>
+                        <div class={`absolute -top-14 -left-14 w-48 h-48 rounded-full blur-3xl pointer-events-none ${isMonarch ? 'bg-purple-600/20' : 'bg-cyan-500/15'}`}></div>
+                        
+                        <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4 relative z-10">
+                            
+                            {/* Player Info & Level */}
+                            <div class="flex items-center space-x-4 space-x-reverse">
+                                <div class="relative">
+                                    <div class={`w-16 h-16 sm:w-20 sm:h-20 rounded-2xl bg-slate-950 border-2 flex flex-col items-center justify-center ${isMonarch ? 'border-purple-400 shadow-neon-monarch' : 'border-cyan-400 shadow-neon-blue'}`}>
+                                        <span class="text-[10px] text-slate-400 font-bold tracking-[.28em]">LEVEL</span>
+                                        <span class={`text-2xl sm:text-3xl font-black ${isMonarch ? 'text-purple-300 glow-text-monarch' : 'text-cyan-300 glow-text'}`}>{player.level}</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="flex flex-wrap items-center gap-2">
+                                        {editingName ? (
+                                            <div class="flex items-center gap-1.5">
+                                                <input 
+                                                    type="text" 
+                                                    placeholder="نام خود را وارد کنید..."
+                                                    value={tempName} 
+                                                    onChange={e => setTempName(e.target.value)}
+                                                    onKeyDown={e => e.key === 'Enter' && savePlayerName()}
+                                                    autoFocus
+                                                    class="bg-slate-900 border border-cyan-400 rounded-lg px-2.5 py-1 text-sm text-white placeholder-slate-500 focus:outline-none"
+                                                />
+                                                <button onClick={savePlayerName} class="px-2.5 py-1 bg-cyan-500 text-black rounded-lg text-xs font-bold">ثبت</button>
+                                            </div>
+                                        ) : (
+                                            <h1 
+                                                onClick={() => { setTempName(player.name || ''); setEditingName(true); }}
+                                                class="text-lg sm:text-xl font-black text-white tracking-wide cursor-pointer hover:text-cyan-300 flex items-center gap-1.5"
+                                                title="برای وارد کردن یا تغییر نام کلیک کنید"
+                                            >
+                                                {player.name ? (
+                                                    <span>{player.name}</span>
+                                                ) : (
+                                                    <span class="text-slate-400 border-b border-dashed border-cyan-500/60 pb-0.5 text-base sm:text-lg font-bold">
+                                                        نام بازیکن (کلیک کنید...)
+                                                    </span>
+                                                )}
+                                                <i data-lucide="edit-3" class="w-3.5 h-3.5 text-slate-500"></i>
+                                            </h1>
+                                        )}
+                                        <span class={`text-xs px-2.5 py-0.5 rounded-full border font-bold ${isMonarch ? 'bg-purple-950/90 border-purple-400 text-purple-200 shadow-neon-monarch' : 'bg-cyan-950/90 border-cyan-500/60 text-cyan-300'}`}>
+                                            {getPlayerTitle(player.level)}
+                                        </span>
+                                    </div>
+
+                                    <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-300 mt-1.5">
+                                        <span class="flex items-center gap-1 text-purple-300 font-semibold">
+                                            <i data-lucide="crown" class="w-3.5 h-3.5"></i>
+                                            کلاس: <strong class="text-white">{player.job}</strong>
+                                        </span>
+                                        <span class="flex items-center gap-1 text-amber-300 font-semibold">
+                                            <i data-lucide="gem" class="w-3.5 h-3.5 text-amber-400"></i>
+                                            سنگ مانا: <strong class="text-amber-300 glow-text-gold">{player.manaCrystals}</strong>
+                                        </span>
+                                        <span class="flex items-center gap-1 text-cyan-300 font-semibold">
+                                            <i data-lucide="ghost" class="w-3.5 h-3.5"></i>
+                                            ارتش سایه: <strong class="text-white">{shadows.length}</strong>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* XP Bar */}
+                            <div class="flex-1 max-w-md w-full">
+                                <div class="flex justify-between text-xs mb-1.5 font-bold">
+                                    <span class={isMonarch ? 'text-purple-300' : 'text-cyan-400'}>تجربه سطح (EXP)</span>
+                                    <span class="text-slate-300 font-mono">{player.xp} / {player.maxXp}</span>
+                                </div>
+                                <div class="w-full bg-slate-950 h-3.5 rounded-full border border-slate-800 p-0.5 overflow-hidden">
+                                    <div 
+                                        class={`h-full rounded-full transition-all duration-500 ${isMonarch ? 'bg-gradient-to-r from-purple-600 via-fuchsia-500 to-cyan-400 shadow-neon-monarch' : 'bg-gradient-to-r from-cyan-600 via-cyan-400 to-blue-500 shadow-neon-blue'}`}
+                                        style={{ width: `${Math.min(100, (player.xp / player.maxXp) * 100)}%` }}
+                                    ></div>
+                                </div>
+                                <div class="flex justify-between text-[11px] text-slate-400 mt-1">
+                                    <span>بونوس ارتش سایه: +{totalShadowXpBoost}% XP</span>
+                                    <span>+{totalShadowCrystalBoost}% سنگ مانا</span>
+                                </div>
+                            </div>
+
+                            {/* Quick Controls */}
+                            <div class="flex items-center justify-end gap-2">
+                                {player.blessedBoxes > 0 && (
+                                    <button 
+                                        onClick={openBlessedBox}
+                                        class="px-3 py-2 rounded-xl border border-amber-400 bg-amber-950/60 text-amber-300 text-xs font-extrabold flex items-center gap-1.5 animate-bounce shadow-neon-gold"
+                                    >
+                                        <i data-lucide="package" class="w-4 h-4"></i>
+                                        جعبه پاداش ({player.blessedBoxes})
+                                    </button>
+                                )}
+                                <button 
+                                    onClick={() => setSoundEnabled(!soundEnabled)}
+                                    class={`p-2.5 rounded-xl border transition-all ${soundEnabled ? 'border-cyan-500/60 bg-cyan-950/40 text-cyan-300' : 'border-slate-800 bg-slate-900 text-slate-500'}`}
+                                    title={soundEnabled ? 'قطع صدای سیستم' : 'وصل صدای سیستم'}
+                                >
+                                    <i data-lucide={soundEnabled ? "volume-2" : "volume-x"} class="w-5 h-5"></i>
+                                </button>
+                                <button 
+                                    onClick={requestResetSystem}
+                                    class="p-2.5 rounded-xl border border-red-500/40 bg-red-950/30 text-red-400 hover:bg-red-900/50 transition-all"
+                                    title="بازنشانی سیستم"
+                                >
+                                    <i data-lucide="rotate-ccw" class="w-5 h-5"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* NAVIGATION TABS */}
+                    <nav class="flex overflow-x-auto gap-2 mb-6 pb-2 border-b border-slate-800/80 text-xs sm:text-sm font-bold">
+                        {[
+                            { id: 'study', label: 'مرکز مطالعه', icon: 'book-open-check', badge: 'MAIN', badgeColor: 'bg-emerald-400 text-black' },
+                            { id: 'status', label: 'پنجره وضعیت', icon: 'user', badge: player.statPoints > 0 ? `+${player.statPoints}` : null, badgeColor: 'bg-emerald-500 text-black' },
+                            { id: 'dungeons', label: 'سیاه‌چال مطالعه', icon: 'swords', badge: dungeon.active ? 'فعال' : null, badgeColor: 'bg-cyan-400 text-black' },
+                            { id: 'shadows', label: 'ارتش سایه‌ها', icon: 'ghost', badge: shadows.length, badgeColor: 'bg-purple-600 text-white' },
+                            { id: 'daily', label: 'مأموریت روزانه', icon: 'calendar-check', badge: penaltyActive ? 'خطر' : null, badgeColor: 'bg-red-600 text-white' },
+                            { id: 'quests', label: 'تابلو مأموریت‌ها', icon: 'scroll' },
+                            { id: 'shop', label: 'فروشگاه سیستم', icon: 'shopping-bag' },
+                            { id: 'planner', label: 'مرکز برنامه‌ریزی', icon: 'brain-circuit', badge: 'V4', badgeColor: 'bg-cyan-500 text-black' },
+                            { id: 'awakening', label: 'درخت مهارت و باس', icon: 'network', badge: 'V5', badgeColor: 'bg-amber-400 text-black' },
+                            { id: 'chronicle', label: 'اتاق فرمان', icon: 'radar', badge: 'V3', badgeColor: 'bg-purple-600 text-white' },
+                            { id: 'logs', label: 'گزارش سیستم', icon: 'terminal' }
+                        ].map(tab => (
+                            <button
+                                key={tab.id}
+                                onClick={() => {
+                                    triggerSound('click');
+                                    setActiveTab(tab.id);
+                                }}
+                                class={`flex items-center gap-2 px-4 py-2.5 rounded-xl whitespace-nowrap transition-all duration-200 border ${
+                                    activeTab === tab.id
+                                        ? (tab.id === 'shadows' ? 'bg-purple-950/80 border-purple-400 text-purple-200 shadow-neon-monarch' : 'bg-cyan-950/80 border-cyan-400 text-cyan-300 shadow-neon-blue')
+                                        : 'bg-slate-900/50 border-slate-800/80 text-slate-400 hover:border-slate-700 hover:text-slate-200'
+                                }`}
+                            >
+                                <i data-lucide={tab.icon} class="w-4 h-4"></i>
+                                <span>{tab.label}</span>
+                                {tab.badge !== null && tab.badge !== undefined && (
+                                    <span class={`text-[10px] px-1.5 py-0.5 rounded-md font-black ${tab.badgeColor}`}>
+                                        {tab.badge}
+                                    </span>
+                                )}
+                            </button>
+                        ))}
+                    </nav>
+
+                    {/* MAIN CONTENT */}
+                    <main class="flex-1">
+                        {activeTab === 'study' && (
+                            <StudyFirstHub 
+                                studySessions={studySessions} 
+                                setStudySessions={setStudySessions} 
+                                studyHub={studyHub} 
+                                setStudyHub={setStudyHub} 
+                                addXPAndCrystals={addXPAndCrystals} 
+                                addNotification={addNotification} 
+                                addLog={addLog} 
+                                triggerSound={triggerSound} 
+                            />
+                        )}
+                        {activeTab === 'status' && (
+                            <StatusWindow 
+                                player={player} 
+                                setPlayer={setPlayer}
+                                upgradeStat={upgradeStat} 
+                                getStatNamePersian={getStatNamePersian}
+                                totalShadowXpBoost={totalShadowXpBoost}
+                                totalShadowCrystalBoost={totalShadowCrystalBoost}
+                            />
+                        )}
+
+                        {activeTab === 'dungeons' && (
+                            <StudyDungeonTab 
+                                dungeon={dungeon} 
+                                setDungeon={setDungeon}
+                                setStudySessions={setStudySessions}
+                                addXPAndCrystals={addXPAndCrystals}
+                                addNotification={addNotification}
+                                triggerSound={triggerSound}
+                                setPlayer={setPlayer}
+                                setAriseModal={setAriseModal}
+                                setConfirmModal={setConfirmModal}
+                                addLog={addLog}
+                            />
+                        )}
+
+                        {activeTab === 'shadows' && (
+                            <ShadowArmyTab 
+                                shadows={shadows}
+                                setShadows={setShadows}
+                                player={player}
+                                setPlayer={setPlayer}
+                                triggerSound={triggerSound}
+                                addNotification={addNotification}
+                                addLog={addLog}
+                            />
+                        )}
+
+                        {activeTab === 'daily' && (
+                            <DailyQuestsTab 
+                                dailyQuests={dailyQuests} 
+                                setDailyQuests={setDailyQuests}
+                                addXPAndCrystals={addXPAndCrystals}
+                                penaltyActive={penaltyActive}
+                                setPenaltyActive={setPenaltyActive}
+                                addNotification={addNotification}
+                                triggerSound={triggerSound}
+                                setPlayer={setPlayer}
+                                addLog={addLog}
+                            />
+                        )}
+
+                        {activeTab === 'quests' && (
+                            <QuestBoardTab 
+                                quests={quests}
+                                setQuests={setQuests}
+                                addXPAndCrystals={addXPAndCrystals}
+                                addNotification={addNotification}
+                                triggerSound={triggerSound}
+                                addLog={addLog}
+                            />
+                        )}
+
+                        {activeTab === 'shop' && (
+                            <SystemShopTab 
+                                player={player}
+                                setPlayer={setPlayer}
+                                shopItems={shopItems}
+                                setShopItems={setShopItems}
+                                addNotification={addNotification}
+                                triggerSound={triggerSound}
+                                setRewardClaimModal={setRewardClaimModal}
+                                addLog={addLog}
+                            />
+                        )}
+
+                        {activeTab === 'planner' && (
+                            <AdaptiveStudyPlanner
+                                data={planData}
+                                setData={setPlanData}
+                                studySessions={studySessions}
+                                addXPAndCrystals={addXPAndCrystals}
+                                addNotification={addNotification}
+                                addLog={addLog}
+                            />
+                        )}
+
+                        {activeTab === 'awakening' && (
+                            <AwakeningArena 
+                                player={player} 
+                                setPlayer={setPlayer} 
+                                skillTree={skillTree} 
+                                setSkillTree={setSkillTree} 
+                                bossHistory={bossHistory} 
+                                setBossHistory={setBossHistory} 
+                                addXPAndCrystals={addXPAndCrystals} 
+                                addNotification={addNotification} 
+                                addLog={addLog} 
+                                triggerSound={triggerSound} 
+                            />
+                        )}
+
+                        {activeTab === 'chronicle' && (
+                            <CommandCenterTab
+                                player={player}
+                                studySessions={studySessions}
+                                campaign={campaign}
+                                setCampaign={setCampaign}
+                                addXPAndCrystals={addXPAndCrystals}
+                                addNotification={addNotification}
+                                addLog={addLog}
+                                triggerSound={triggerSound}
+                            />
+                        )}
+
+                        {activeTab === 'logs' && (
+                            <SystemLogsTab logs={logs} />
+                        )}
+                    </main>
+
+                    {/* SOLO LEVELING SYSTEM ALARM WINDOWS */}
+                    <div class="fixed top-5 left-3 right-3 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 sm:w-[min(560px,calc(100vw-32px))] z-[100] space-y-3 pointer-events-none">
+                        {notifications.map(n => (
+                            <div key={n.id} class={`solo-alarm pointer-events-auto ${n.type === 'warning' ? 'alarm-danger' : n.type === 'success' ? 'alarm-reward' : n.type === 'monarch' ? 'alarm-monarch' : n.type === 'quest' ? 'alarm-quest' : 'alarm-info'}`}>
+                                <div class="alarm-corner alarm-corner-tl"></div><div class="alarm-corner alarm-corner-tr"></div>
+                                <div class="alarm-corner alarm-corner-bl"></div><div class="alarm-corner alarm-corner-br"></div>
+                                <button aria-label="بستن پیام" onClick={() => setNotifications(prev => prev.filter(x => x.id !== n.id))} class="alarm-close">×</button>
+                                <div class="alarm-heading"><span class="alarm-symbol">!</span><span>ALARM</span></div>
+                                <div class="alarm-rule"></div>
+                                <h4 class="alarm-title">{n.title.replace(/[\[\]]/g, '')}</h4>
+                                <p class="alarm-message">{n.message}</p>
+                                <div class="alarm-footer"><span>SYSTEM MESSAGE</span><span>SHADOW MONARCH</span></div>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* ARISE (SHADOW EXTRACTION) MODAL */}
+                    {ariseModal && (
+                        <AriseModal 
+                            ariseModal={ariseModal} 
+                            onArise={handleAriseShadow} 
+                            onClose={() => setAriseModal(null)} 
+                        />
+                    )}
+
+                    {/* LEVEL UP MODAL */}
+                    {levelUpModal && (
+                        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                            <div class="system-panel solo-system-modal rounded-3xl p-8 max-w-md w-full text-center border-2 border-cyan-400 shadow-neon-strong animate-float">
+                                <div class="w-20 h-20 mx-auto mb-4 rounded-2xl bg-cyan-950 border-2 border-cyan-400 flex items-center justify-center shadow-neon-blue">
+                                    <i data-lucide="chevrons-up" class="w-11 h-11 text-cyan-300"></i>
+                                </div>
+                                <h2 class="text-3xl font-black text-cyan-300 glow-text mb-2">[ LEVEL UP! ]</h2>
+                                <p class="text-slate-300 text-sm mb-6">محدودیت‌های قبلی شکسته شد. سطح شما افزایش یافت!</p>
+                                <div class="bg-slate-950/90 rounded-2xl p-4 border border-cyan-900 mb-6 text-right space-y-2.5 text-sm">
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-400">سطح جدید:</span>
+                                        <span class="text-cyan-400 font-black">{player.level}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-400">کلاس فعلی:</span>
+                                        <span class="text-purple-300 font-bold">{player.job}</span>
+                                    </div>
+                                    <div class="flex justify-between">
+                                        <span class="text-slate-400">امتیاز وضعیت آزاد:</span>
+                                        <span class="text-emerald-400 font-black">+۳ امتیاز</span>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => setLevelUpModal(false)}
+                                    class="w-full py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-black rounded-xl shadow-neon-blue transition-all"
+                                >
+                                    ادامه مسیر
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* BLESSED BOX REWARD MODAL */}
+                    {boxRewardModal && (
+                        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                            <div class="system-panel solo-system-modal solo-system-modal-gold rounded-3xl p-7 max-w-md w-full text-center border-2 border-amber-400 shadow-neon-gold animate-arise">
+                                <div class="w-16 h-16 mx-auto mb-3 rounded-2xl bg-amber-950 border border-amber-400 flex items-center justify-center">
+                                    <i data-lucide="sparkles" class="w-9 h-9 text-amber-300"></i>
+                                </div>
+                                <h3 class="text-xl font-black text-amber-300 glow-text-gold mb-2">[ جعبه برکت باز شد ]</h3>
+                                <p class="text-slate-300 text-xs mb-4">پاداش تصادفی سیستم برای تلاش‌های مستمر شما:</p>
+                                <div class="bg-amber-950/50 rounded-xl p-4 border border-amber-500/50 text-amber-200 font-black text-lg mb-6">
+                                    {boxRewardModal.label}
+                                </div>
+                                <button
+                                    onClick={() => setBoxRewardModal(null)}
+                                    class="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-black rounded-xl transition-all"
+                                >
+                                    دریافت پاداش
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* SHOP REWARD CLAIM MODAL */}
+                    {rewardClaimModal && (
+                        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                            <div class="system-panel solo-system-modal solo-system-modal-gold rounded-3xl p-6 max-w-md w-full text-center border-2 border-amber-400 shadow-neon-gold">
+                                <div class="w-16 h-16 mx-auto mb-3 rounded-full bg-amber-950 border border-amber-400 flex items-center justify-center">
+                                    <i data-lucide="gift" class="w-8 h-8 text-amber-300"></i>
+                                </div>
+                                <h3 class="text-xl font-black text-amber-300 glow-text-gold mb-2">[ مجوز پاداش صادر شد ]</h3>
+                                <p class="text-slate-300 text-xs mb-4">سنگ‌های مانا کسر شدند. اکنون با آرامش از پاداش خود لذت ببرید:</p>
+                                <div class="bg-amber-950/40 rounded-xl p-4 border border-amber-500/40 text-amber-200 font-bold text-lg mb-6">
+                                    {rewardClaimModal.title}
+                                </div>
+                                <button
+                                    onClick={() => setRewardClaimModal(null)}
+                                    class="w-full py-2.5 bg-amber-400 hover:bg-amber-300 text-black font-extrabold rounded-xl transition-all"
+                                >
+                                    تأیید
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* CUSTOM SYSTEM CONFIRMATION MODAL */}
+                    {confirmModal && (
+                        <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+                            <div class={`rounded-2xl p-6 max-w-md w-full border ${confirmModal.danger ? 'system-panel-danger solo-system-modal solo-system-modal-danger border-red-500' : 'system-panel solo-system-modal border-cyan-400'}`}>
+                                <h3 class={`text-lg font-black mb-2 ${confirmModal.danger ? 'text-red-400 glow-text-red' : 'text-cyan-300'}`}>
+                                    {confirmModal.title}
+                                </h3>
+                                <p class="text-sm text-slate-300 leading-relaxed mb-6">{confirmModal.message}</p>
+                                <div class="flex gap-3">
+                                    <button
+                                        onClick={confirmModal.onConfirm}
+                                        class={`flex-1 py-2.5 rounded-xl font-extrabold text-sm transition-all ${confirmModal.danger ? 'bg-red-600 hover:bg-red-500 text-white' : 'bg-cyan-500 text-black'}`}
+                                    >
+                                        تأیید عملیات
+                                    </button>
+                                    <button
+                                        onClick={() => setConfirmModal(null)}
+                                        class="flex-1 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 font-bold text-sm"
+                                    >
+                                        انصراف
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    <footer class="mt-10 text-center text-xs text-slate-500 border-t border-slate-900 pt-4">
+                        <p>SHADOW MONARCH STUDY SYSTEM  •  برخیز، بازیکن. مسیر قدرت از امروز آغاز می‌شود.</p>
+                    </footer>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // ARISE MODAL COMPONENT
+        // ==========================================
+        function AriseModal({ ariseModal, onArise, onClose }) {
+            const [shadowName, setShadowName] = useState(`سایه ${ariseModal.subject}`);
+
+            return (
+                <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-lg">
+                    <div class="monarch-panel rounded-3xl p-8 max-w-md w-full text-center border-2 border-purple-400 shadow-neon-monarch animate-arise">
+                        <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-purple-950 border-2 border-purple-400 flex items-center justify-center shadow-neon-monarch">
+                            <i data-lucide="ghost" class="w-10 h-10 text-purple-300"></i>
+                        </div>
+                        <span class="text-xs font-black text-purple-400 tracking-widest uppercase">Shadow Extraction Available</span>
+                        <h2 class="text-2xl font-black text-white glow-text-monarch mt-1 mb-2">استخراج روح دانش!</h2>
+                        <p class="text-xs text-slate-300 mb-5 leading-relaxed">
+                            شما سیاه‌چال <strong class="text-cyan-300">«{ariseModal.subject}»</strong> را پاکسازی کردید. می‌توانید دانش این جلسه را به یک سرباز سایه دائمی تبدیل کنید!
+                        </p>
+
+                        <div class="text-right mb-5">
+                            <label class="block text-xs text-purple-300 font-bold mb-1.5">نام‌گذاری سرباز سایه:</label>
+                            <input 
+                                type="text"
+                                value={shadowName}
+                                onChange={(e) => setShadowName(e.target.value)}
+                                class="w-full bg-slate-950 border border-purple-500/60 rounded-xl px-4 py-2.5 text-sm text-white focus:outline-none focus:border-purple-400"
+                            />
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button
+                                onClick={() => onArise(shadowName)}
+                                class="flex-1 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 text-white font-black rounded-xl shadow-neon-monarch transition-all tracking-wider"
+                            >
+                                برخیز! (ARISE)
+                            </button>
+                            <button
+                                onClick={onClose}
+                                class="px-4 py-3 bg-slate-900 hover:bg-slate-800 text-slate-400 text-xs font-bold rounded-xl"
+                            >
+                                صرف‌نظر
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 1. STATUS WINDOW
+        // ==========================================
+        function StatusWindow({ player, setPlayer, upgradeStat, getStatNamePersian, totalShadowXpBoost, totalShadowCrystalBoost }) {
+            const statDescriptions = {
+                focus: 'افزایش ضریب کسب XP در تمامی فعالیت‌ها (+۲٪ به ازای هر سطح)',
+                memory: 'نماد تسلط بر مطالب و تقویت قدرت ارتش سایه‌ها',
+                stamina: 'افزایش پایداری ذهنی در جلسات مطالعه طولانی‌مدت',
+                intelligence: 'افزایش ضریب دریافت سنگ مانا (+۳٪ به ازای هر سطح)',
+                discipline: 'افزایش شانس دریافت جعبه برکت پس از تکمیل مأموریت روزانه'
+            };
+
+            const statIcons = {
+                focus: 'target',
+                memory: 'brain',
+                stamina: 'battery-charging',
+                intelligence: 'sparkles',
+                discipline: 'shield-check'
+            };
+
+            return (
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    {/* Left: Profile Card */}
+                    <div class="system-panel rounded-2xl p-6 flex flex-col justify-between">
+                        <div>
+                            <div class="text-center pb-6 border-b border-cyan-900/50">
+                                <div class="w-24 h-24 mx-auto mb-4 rounded-2xl bg-gradient-to-tr from-slate-950 via-cyan-950 to-purple-950 border-2 border-cyan-400 flex items-center justify-center shadow-neon-blue relative">
+                                    <i data-lucide="shield" class="w-12 h-12 text-cyan-300"></i>
+                                    <span class="absolute -bottom-2.5 bg-cyan-400 text-black font-black text-xs px-3 py-0.5 rounded-full">
+                                        LVL {player.level}
+                                    </span>
+                                </div>
+                                <div class="max-w-xs mx-auto mb-1">
+                                    <input
+                                        type="text"
+                                        placeholder="نام خود را اینجا بنویسید..."
+                                        value={player.name || ''}
+                                        onChange={(e) => setPlayer(prev => ({ ...prev, name: e.target.value }))}
+                                        class="w-full text-center bg-slate-950/80 border border-cyan-500/40 focus:border-cyan-400 rounded-xl px-3 py-1.5 text-base font-black text-white placeholder-slate-500 focus:outline-none"
+                                    />
+                                </div>
+                                <p class="text-xs text-purple-300 font-bold mt-2">{player.job}</p>
+                            </div>
+
+                            <div class="mt-5 space-y-3 text-xs sm:text-sm">
+                                <div class="flex justify-between items-center bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 flex items-center gap-2">
+                                        <i data-lucide="award" class="w-4 h-4 text-emerald-400"></i>
+                                        امتیاز وضعیت آزاد:
+                                    </span>
+                                    <span class={`font-black text-base ${player.statPoints > 0 ? 'text-emerald-400 animate-pulse' : 'text-slate-500'}`}>
+                                        {player.statPoints}
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between items-center bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 flex items-center gap-2">
+                                        <i data-lucide="clock" class="w-4 h-4 text-cyan-400"></i>
+                                        مجموع مطالعه ثبت‌شده:
+                                    </span>
+                                    <span class="font-bold text-slate-200">
+                                        {Math.floor(player.totalStudyMinutes / 60)} ساعت و {player.totalStudyMinutes % 60} دقیقه
+                                    </span>
+                                </div>
+
+                                <div class="flex justify-between items-center bg-slate-950/70 p-3 rounded-xl border border-slate-800">
+                                    <span class="text-slate-400 flex items-center gap-2">
+                                        <i data-lucide="swords" class="w-4 h-4 text-indigo-400"></i>
+                                        سیاه‌چال‌های پاکسازی‌شده:
+                                    </span>
+                                    <span class="font-bold text-slate-200">{player.completedDungeonsCount}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Active Multipliers Box */}
+                        <div class="mt-5 p-3.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30 text-xs space-y-1.5">
+                            <div class="font-bold text-cyan-300 mb-1">ضرایب فعال سیستم:</div>
+                            <div class="flex justify-between text-slate-300">
+                                <span>ضریب کل XP:</span>
+                                <span class="text-cyan-400 font-bold">+{((player.stats.focus - 10) * 2) + totalShadowXpBoost}%</span>
+                            </div>
+                            <div class="flex justify-between text-slate-300">
+                                <span>ضریب سنگ مانا:</span>
+                                <span class="text-amber-400 font-bold">+{((player.stats.intelligence - 10) * 3) + totalShadowCrystalBoost}%</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    {/* Right: Stats Allocation */}
+                    <div class="lg:col-span-2 system-panel rounded-2xl p-6">
+                        <div class="flex flex-wrap items-center justify-between gap-2 mb-6 pb-3 border-b border-cyan-900/50">
+                            <div>
+                                <h3 class="text-lg font-black text-cyan-300 flex items-center gap-2">
+                                    <i data-lucide="sliders" class="w-5 h-5"></i>
+                                    پنجره وضعیت (STATUS)
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-0.5">امتیازهای کسب‌شده از ارتقای سطح را برای تقویت توانایی‌های خود خرج کنید.</p>
+                            </div>
+                            {player.statPoints > 0 && (
+                                <span class="text-xs bg-emerald-950 border border-emerald-400 text-emerald-300 px-3 py-1 rounded-full font-black animate-pulse">
+                                    {player.statPoints} امتیاز قابل استفاده
+                                </span>
+                            )}
+                        </div>
+
+                        <div class="space-y-3.5">
+                            {Object.entries(player.stats).map(([key, val]) => (
+                                <div key={key} class="bg-slate-950/70 border border-cyan-900/40 p-4 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:border-cyan-500/50 transition-all">
+                                    <div class="flex items-center gap-3.5">
+                                        <div class="w-11 h-11 rounded-xl bg-cyan-950/80 border border-cyan-500/40 flex items-center justify-center text-cyan-300 shrink-0">
+                                            <i data-lucide={statIcons[key]} class="w-5 h-5"></i>
+                                        </div>
+                                        <div>
+                                            <div class="flex items-center gap-2">
+                                                <h4 class="font-bold text-slate-100 text-sm">{getStatNamePersian(key)}</h4>
+                                                <span class="text-xs text-cyan-300 font-black px-2.5 py-0.5 rounded-md bg-cyan-950 border border-cyan-700 font-mono">
+                                                    {val}
+                                                </span>
+                                            </div>
+                                            <p class="text-xs text-slate-400 mt-1">{statDescriptions[key]}</p>
+                                        </div>
+                                    </div>
+
+                                    <button
+                                        onClick={() => upgradeStat(key)}
+                                        disabled={player.statPoints <= 0}
+                                        class={`px-4 py-2.5 rounded-xl text-xs font-black transition-all flex items-center justify-center gap-1 shrink-0 ${
+                                            player.statPoints > 0
+                                                ? 'bg-cyan-500 hover:bg-cyan-400 text-black shadow-neon-blue'
+                                                : 'bg-slate-900 text-slate-600 border border-slate-800 cursor-not-allowed'
+                                        }`}
+                                    >
+                                        <i data-lucide="plus" class="w-4 h-4"></i>
+                                        ارتقا (+۱)
+                                    </button>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 2. STUDY DUNGEONS TAB
+        // ==========================================
+        function StudyDungeonTab({ dungeon, setDungeon, setStudySessions, addXPAndCrystals, addNotification, triggerSound, setPlayer, setAriseModal, setConfirmModal, addLog }) {
+            const timerRef = useRef(null);
+
+            const dungeonRanks = [
+                { rank: 'E', title: 'سیاه‌چال E-Rank (۲۵ دقیقه)', minutes: 25, xp: 45, crystals: 25, color: 'text-cyan-300' },
+                { rank: 'C', title: 'سیاه‌چال C-Rank (۵۰ دقیقه)', minutes: 50, xp: 100, crystals: 60, color: 'text-blue-400' },
+                { rank: 'A', title: 'سیاه‌چال A-Rank (۹۰ دقیقه)', minutes: 90, xp: 200, crystals: 120, color: 'text-purple-400' },
+                { rank: 'Red Gate', title: 'دروازه قرمز Red Gate (۱۲۰ دقیقه)', minutes: 120, xp: 300, crystals: 200, color: 'text-red-400' }
+            ];
+
+            const selectRank = (r) => {
+                if (dungeon.active) return;
+                triggerSound('click');
+                setDungeon(prev => ({
+                    ...prev,
+                    rank: r.rank,
+                    title: r.title,
+                    duration: r.minutes * 60,
+                    timeLeft: r.minutes * 60,
+                    xpReward: r.xp,
+                    crystalReward: r.crystals
+                }));
+            };
+
+            const startDungeon = () => {
+                if (!dungeon.subject.trim()) {
+                    addNotification('[خطای سیستم]', 'ابتدا نام درس یا مبحث مورد نظر را وارد کنید.', 'warning');
+                    return;
+                }
+                triggerSound('complete');
+                setDungeon(prev => ({ ...prev, active: true, isPaused: false }));
+                addLog(`ورود به سیاه‌چال ${dungeon.rank} برای مطالعه «${dungeon.subject}»`);
+                addNotification('[مأموریت آغاز شد]', `سیاه‌چال ${dungeon.title} برای مطالعه «${dungeon.subject}» فعال شد.`, 'quest');
+            };
+
+            const abandonDungeon = () => {
+                setConfirmModal({
+                    title: '[فرار از سیاه‌چال؟]',
+                    message: 'در صورت خروج زودهنگام، تمام پیشرفت این جلسه از بین می‌رود و هیچ پاداشی دریافت نخواهید کرد.',
+                    danger: true,
+                    onConfirm: () => {
+                        triggerSound('warning');
+                        clearInterval(timerRef.current);
+                        setDungeon(prev => ({ ...prev, active: false, timeLeft: prev.duration, isPaused: false }));
+                        setConfirmModal(null);
+                        addLog(`عقب‌نشینی از سیاه‌چال «${dungeon.subject}»`, 'warning');
+                        addNotification('[عقب‌نشینی]', 'شما از سیاه‌چال خارج شدید.', 'warning');
+                    }
+                });
+            };
+
+            useEffect(() => {
+                if (dungeon.active && !dungeon.isPaused) {
+                    timerRef.current = setInterval(() => {
+                        setDungeon(prev => {
+                            if (prev.timeLeft <= 1) {
+                                clearInterval(timerRef.current);
+                                triggerSound('levelUp');
+                                const studyMin = Math.round(prev.duration / 60);
+                                setStudySessions(history => [{
+                                    id: 'session_' + Date.now(),
+                                    subject: prev.subject,
+                                    rank: prev.rank,
+                                    minutes: studyMin,
+                                    date: new Date().toISOString()
+                                }, ...history].slice(0, 250));
+                                addXPAndCrystals(prev.xpReward, prev.crystalReward);
+                                
+                                setPlayer(p => ({
+                                    ...p,
+                                    completedDungeonsCount: p.completedDungeonsCount + 1,
+                                    totalStudyMinutes: p.totalStudyMinutes + studyMin
+                                }));
+
+                                addLog(`پاکسازی کامل سیاه‌چال ${prev.rank}: «${prev.subject}» (${studyMin} دقیقه)`, 'success');
+                                setAriseModal({ subject: prev.subject, rank: prev.rank });
+                                return { ...prev, active: false, timeLeft: prev.duration, isPaused: false };
+                            }
+                            return { ...prev, timeLeft: prev.timeLeft - 1 };
+                        });
+                    }, 1000);
+                } else {
+                    clearInterval(timerRef.current);
+                }
+                return () => clearInterval(timerRef.current);
+            }, [dungeon.active, dungeon.isPaused]);
+
+            const formatTime = (sec) => {
+                const m = Math.floor(sec / 60);
+                const s = sec % 60;
+                return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+            };
+
+            const progress = ((dungeon.duration - dungeon.timeLeft) / dungeon.duration) * 100;
+
+            return (
+                <div class="space-y-6">
+                    {!dungeon.active ? (
+                        <div class="system-panel rounded-2xl p-6">
+                            <div class="system-kicker">SYSTEM // GATE SELECTION</div>
+                            <h3 class="text-lg font-black text-cyan-300 mb-1 flex items-center gap-2">
+                                <i data-lucide="swords" class="w-5 h-5"></i>
+                                انتخاب سیاه‌چال مطالعه (Study Dungeon)
+                            </h3>
+                            <p class="text-xs text-slate-400 mb-6">پس از پاکسازی هر سیاه‌چال، امکان استخراج سایه آن درس با دستور ARISE فعال می‌شود!</p>
+
+                            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                                {dungeonRanks.map(r => (
+                                    <div
+                                        key={r.rank}
+                                        onClick={() => selectRank(r)}
+                                        class={`dungeon-rank-card p-4 rounded-xl border cursor-pointer transition-all ${
+                                            dungeon.rank === r.rank
+                                                ? 'dungeon-rank-selected bg-cyan-950/80 border-cyan-400 shadow-neon-blue scale-[1.02]'
+                                                : 'bg-slate-950/60 border-slate-800 hover:border-cyan-800'
+                                        }`}
+                                    >
+                                        <div class="flex justify-between items-center mb-2">
+                                            <span class={`font-black text-base ${r.color}`}>Rank {r.rank}</span>
+                                            <span class="text-xs bg-slate-900 px-2 py-0.5 rounded text-slate-300 font-bold">{r.minutes} دقیقه</span>
+                                        </div>
+                                        <p class="text-xs text-slate-300 font-semibold mb-3">{r.title}</p>
+                                        <div class="flex justify-between text-xs font-bold border-t border-slate-800 pt-2">
+                                            <span class="text-cyan-400">+{r.xp} XP</span>
+                                            <span class="text-amber-400">💎 {r.crystals}</span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <input 
+                                    type="text"
+                                    placeholder="نام درس یا مبحث هدف (مثلاً: فیزیک الکتریسیته، گرامر زبان، کدنویسی...)"
+                                    value={dungeon.subject}
+                                    onChange={(e) => setDungeon(prev => ({ ...prev, subject: e.target.value }))}
+                                    class="flex-1 bg-slate-950 border border-cyan-900 rounded-xl px-4 py-3 text-sm text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-400"
+                                />
+                                <button
+                                    onClick={startDungeon}
+                                    class="px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-black rounded-xl shadow-neon-blue transition-all flex items-center justify-center gap-2"
+                                >
+                                    <i data-lucide="play" class="w-5 h-5"></i>
+                                    ورود به سیاه‌چال
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div class="system-panel rounded-3xl p-8 border-2 border-cyan-400 shadow-neon-strong text-center">
+                            <div class="inline-block px-4 py-1 rounded-full bg-cyan-950 border border-cyan-400 text-cyan-300 text-xs font-black mb-4 animate-pulse">
+                                [ در حال نبرد در سیاه‌چال Rank {dungeon.rank} ]
+                            </div>
+                            <h2 class="text-2xl font-black text-white glow-text mb-1">{dungeon.subject}</h2>
+                            <p class="text-xs text-slate-400 mb-8">تمرکز خود را حفظ کنید تا دروازه پاکسازی شود</p>
+
+                            <div class="relative w-64 h-64 mx-auto mb-8 flex items-center justify-center">
+                                <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="44" class="stroke-slate-900" stroke-width="6" fill="transparent" />
+                                    <circle
+                                        cx="50" cy="50" r="44"
+                                        class="stroke-cyan-400 transition-all duration-1000"
+                                        stroke-width="6"
+                                        stroke-dasharray="276.46"
+                                        stroke-dashoffset={276.46 - (276.46 * progress) / 100}
+                                        stroke-linecap="round"
+                                        fill="transparent"
+                                    />
+                                </svg>
+                                <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                    <span class="text-5xl font-black tracking-widest text-cyan-300 font-mono glow-text">
+                                        {formatTime(dungeon.timeLeft)}
+                                    </span>
+                                    <span class="text-xs text-slate-400 mt-2 font-bold">
+                                        {dungeon.isPaused ? 'توقف موقت' : 'در حال مطالعه...'}
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-center gap-4 max-w-md mx-auto">
+                                <button
+                                    onClick={() => { triggerSound('click'); setDungeon(p => ({ ...p, isPaused: !p.isPaused })); }}
+                                    class={`flex-1 py-3 px-6 rounded-xl font-black transition-all flex items-center justify-center gap-2 ${
+                                        dungeon.isPaused ? 'bg-emerald-500 text-black' : 'bg-amber-500 text-black'
+                                    }`}
+                                >
+                                    <i data-lucide={dungeon.isPaused ? "play" : "pause"} class="w-5 h-5"></i>
+                                    {dungeon.isPaused ? 'ادامه' : 'توقف'}
+                                </button>
+                                <button
+                                    onClick={abandonDungeon}
+                                    class="flex-1 py-3 px-6 rounded-xl bg-red-950/80 hover:bg-red-900 border border-red-500/60 text-red-300 font-bold transition-all flex items-center justify-center gap-2"
+                                >
+                                    <i data-lucide="log-out" class="w-5 h-5"></i>
+                                    عقب‌نشینی
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 3. SHADOW ARMY TAB
+        // ==========================================
+        function ShadowArmyTab({ shadows, setShadows, player, setPlayer, triggerSound, addNotification, addLog }) {
+            const upgradeShadow = (id) => {
+                const cost = 60;
+                if (player.manaCrystals < cost) {
+                    triggerSound('warning');
+                    addNotification('[کمبود سنگ مانا]', 'برای ارتقای سطح سرباز سایه به ۶۰ سنگ مانا نیاز دارید.', 'warning');
+                    return;
+                }
+
+                triggerSound('arise');
+                setPlayer(p => ({ ...p, manaCrystals: p.manaCrystals - cost }));
+                setShadows(prev => prev.map(s => {
+                    if (s.id === id) {
+                        const updated = {
+                            ...s,
+                            level: s.level + 1,
+                            xpBoost: s.xpBoost + 2,
+                            crystalBoost: s.crystalBoost + 1
+                        };
+                        addLog(`ارتقای سرباز سایه: ${s.name} به سطح ${updated.level} رسید.`);
+                        return updated;
+                    }
+                    return s;
+                }));
+                addNotification('[ارتقای ارتش سایه]', 'قدرت سرباز سایه افزایش یافت!', 'monarch');
+            };
+
+            return (
+                <div class="space-y-6">
+                    <div class="monarch-panel rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-purple-950 border-2 border-purple-400 flex items-center justify-center shadow-neon-monarch shrink-0">
+                                <i data-lucide="ghost" class="w-8 h-8 text-purple-300"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-purple-200 glow-text-monarch">ارتش سایه‌های دانش (Shadow Army)</h3>
+                                <p class="text-xs text-slate-300 mt-1">هر سیاه‌چالی که پاکسازی کنید به یک سرباز وفادار تبدیل می‌شود و به صورت دائمی امتیاز XP و سنگ مانای شما را افزایش می‌دهد.</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-950/90 px-5 py-3 rounded-xl border border-purple-500/40 text-center shrink-0">
+                            <span class="text-xs text-slate-400 block">تعداد سربازان سایه</span>
+                            <span class="text-2xl font-black text-purple-300">{shadows.length}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                        {shadows.map(sh => (
+                            <div key={sh.id} class="monarch-panel rounded-2xl p-5 flex flex-col justify-between hover:border-purple-400 transition-all">
+                                <div>
+                                    <div class="flex justify-between items-center mb-3">
+                                        <span class="text-[11px] font-black px-2.5 py-0.5 rounded bg-purple-950 border border-purple-400 text-purple-200">
+                                            {sh.level >= 15 ? 'فرمانده' : sh.level >= 8 ? 'شوالیه' : sh.level >= 4 ? 'نخبه' : sh.rank} • LVL {sh.level}
+                                        </span>
+                                        <i data-lucide="flame" class="w-4 h-4 text-purple-400"></i>
+                                    </div>
+                                    <h4 class="text-base font-black text-white mb-1">{sh.name}</h4>
+                                    <p class="text-xs text-slate-400 mb-4">منشأ: {sh.subject}</p>
+                                </div>
+
+                                <div class="space-y-3 pt-3 border-t border-purple-900/50">
+                                    <div class="flex justify-between text-xs font-bold">
+                                        <span class="text-cyan-400">بونوس XP: +{sh.xpBoost}%</span>
+                                        <span class="text-amber-400">بونوس مانا: +{sh.crystalBoost}%</span>
+                                    </div>
+                                    <button
+                                        onClick={() => upgradeShadow(sh.id)}
+                                        class="w-full py-2 rounded-xl bg-purple-600/80 hover:bg-purple-500 text-white text-xs font-black transition-all flex items-center justify-center gap-1.5"
+                                    >
+                                        <i data-lucide="arrow-up-circle" class="w-4 h-4"></i>
+                                        تقویت سایه (💎 ۶۰)
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 4. DAILY QUESTS & PENALTY TAB
+        // ==========================================
+        function DailyQuestsTab({ dailyQuests, setDailyQuests, addXPAndCrystals, penaltyActive, setPenaltyActive, addNotification, triggerSound, setPlayer, addLog }) {
+            const [newQuestTitle, setNewQuestTitle] = useState('');
+
+            const toggleQuest = (id) => {
+                triggerSound('click');
+                setDailyQuests(prev => {
+                    const next = prev.map(q => {
+                        if (q.id === id) {
+                            const updated = !q.completed;
+                            if (updated) {
+                                addXPAndCrystals(q.xp, q.crystals);
+                                addLog(`تکمیل مأموریت روزانه: ${q.title}`);
+                            }
+                            return { ...q, completed: updated };
+                        }
+                        return q;
+                    });
+
+                    const allDone = next.length > 0 && next.every(item => item.completed);
+                    const wasAllDone = prev.length > 0 && prev.every(item => item.completed);
+                    if (allDone && !wasAllDone) {
+                        setPlayer(p => ({ ...p, blessedBoxes: p.blessedBoxes + 1 }));
+                        addNotification('[پاداش ویژه روزانه]', 'تمام مأموریت‌های روزانه تکمیل شد! ۱ عدد «جعبه برکت» دریافت کردید.', 'success');
+                        addLog('دریافت جعبه برکت به خاطر تکمیل تمام مأموریت‌های روزانه!', 'success');
+                    }
+                    return next;
+                });
+            };
+
+            const addCustomDaily = (e) => {
+                e.preventDefault();
+                if (!newQuestTitle.trim()) return;
+                setDailyQuests(prev => [...prev, {
+                    id: 'd_' + Date.now(),
+                    title: newQuestTitle.trim(),
+                    xp: 35,
+                    crystals: 20,
+                    completed: false
+                }]);
+                setNewQuestTitle('');
+                addNotification('[مأموریت جدید]', `مأموریت «${newQuestTitle.trim()}» به فهرست روزانه اضافه شد.`, 'quest');
+                triggerSound('click');
+            };
+
+            const resetDailyForNewDay = () => {
+                setDailyQuests(prev => prev.map(q => ({ ...q, completed: false })));
+                setPlayer(p => ({ ...p, streakDays: p.streakDays + 1 }));
+                triggerSound('complete');
+                addNotification('[مأموریت‌های جدید]', 'روز تازه آغاز شد. فهرست مأموریت‌ها آماده دریافت است.', 'quest');
+                addLog('آغاز روز جدید و تمدید مأموریت‌های روزانه.');
+            };
+
+            const completedCount = dailyQuests.filter(q => q.completed).length;
+
+            return (
+                <div class="space-y-6">
+                    {penaltyActive ? (
+                        <div class="system-panel rounded-2xl p-6 border border-amber-500/50">
+                            <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-14 h-14 rounded-2xl bg-red-950 border-2 border-red-500 flex items-center justify-center shadow-neon-red shrink-0">
+                                        <i data-lucide="shield-refresh" class="w-8 h-8 text-amber-300"></i>
+                                    </div>
+                                    <div>
+                                        <h3 class="text-lg font-black text-amber-300">[ منطقه بازگشت / RECOVERY ZONE ]</h3>
+                                        <p class="text-xs text-slate-300 mt-1">این بخش برای برگشت آرام به برنامه است، نه تنبیه. یک قدم کوچک انتخاب کن؛ استراحت یا شروع دوباره هر دو قابل قبول‌اند.</p>
+                                    </div>
+                                </div>
+                                <button
+                                    onClick={() => {
+                                        setPenaltyActive(false);
+                                        triggerSound('complete');
+                                        addLog('بازگشت داوطلبانه به برنامه مطالعه.');
+                                        addNotification('[بازگشت ثبت شد]', 'خوش آمدی. با یک هدف کوچک و واقع‌بینانه ادامه بده؛ هیچ جریمه یا پاداش اجباری وجود ندارد.', 'success');
+                                    }}
+                                    class="px-6 py-3 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl whitespace-nowrap"
+                                >
+                                    شروع دوباره با یک قدم کوچک
+                                </button>
+                            </div>
+                        </div>
+                    ) : (
+                        <div class="system-panel rounded-2xl p-4 flex flex-wrap items-center justify-between gap-2">
+                            <div class="flex items-center gap-2 text-xs sm:text-sm">
+                                <i data-lucide="shield-check" class="w-5 h-5 text-emerald-400"></i>
+                                <span>وضعیت فعلی: <strong class="text-emerald-400">امن (استریک: {dailyQuests.length > 0 && completedCount === dailyQuests.length ? 'تکمیل شده' : 'در جریان'})</strong></span>
+                            </div>
+                            <div class="flex items-center gap-4">
+                                <button onClick={resetDailyForNewDay} class="text-xs text-cyan-400 hover:underline font-bold">
+                                    شروع روز جدید (تازه‌سازی لیست)
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setPenaltyActive(true);
+                                        triggerSound('warning');
+                                        addNotification('[یادآوری سیستم]', 'اگر از برنامه عقب افتادی، اشکالی ندارد. منطقه بازگشت برای شروع دوباره آماده است.', 'warning');
+                                    }}
+                                    class="text-xs text-red-400 hover:underline"
+                                >
+                                    نمایش منطقه بازگشت
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    <div class="system-panel rounded-2xl p-6">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between pb-4 mb-6 border-b border-cyan-900/50 gap-4">
+                            <div>
+                                <h3 class="text-lg font-black text-cyan-300 flex items-center gap-2">
+                                    <i data-lucide="calendar-check" class="w-5 h-5"></i>
+                                    آماده‌سازی روزانه (Daily Quest)
+                                </h3>
+                                <p class="text-xs text-slate-400 mt-1">با تکمیل ۱۰۰٪ لیست، یک «جعبه برکت» جایزه می‌گیرید ({completedCount}/{dailyQuests.length})</p>
+                            </div>
+                            <div class="w-48 bg-slate-950 h-2.5 rounded-full overflow-hidden border border-cyan-900">
+                                <div 
+                                    class="bg-cyan-400 h-full rounded-full transition-all duration-300 shadow-neon-blue"
+                                    style={{ width: `${dailyQuests.length ? (completedCount / dailyQuests.length) * 100 : 0}%` }}
+                                ></div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mb-6">
+                            {dailyQuests.map(q => (
+                                <div 
+                                    key={q.id} 
+                                    onClick={() => toggleQuest(q.id)}
+                                    class={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
+                                        q.completed 
+                                            ? 'bg-slate-950/40 border-emerald-500/40 opacity-70' 
+                                            : 'bg-slate-900/70 border-cyan-900/60 hover:border-cyan-400'
+                                    }`}
+                                >
+                                    <div class="flex items-center gap-3">
+                                        <div class={`w-6 h-6 rounded-md border flex items-center justify-center ${
+                                            q.completed ? 'bg-emerald-500 border-emerald-400 text-black' : 'border-cyan-500/60 bg-cyan-950/40'
+                                        }`}>
+                                            {q.completed && <i data-lucide="check" class="w-4 h-4 stroke-[3]"></i>}
+                                        </div>
+                                        <span class={`text-sm font-semibold ${q.completed ? 'line-through text-slate-400' : 'text-slate-100'}`}>
+                                            {q.title}
+                                        </span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-xs font-bold">
+                                        <span class="text-cyan-400">+{q.xp} XP</span>
+                                        <span class="text-amber-400">💎 {q.crystals}</span>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <form onSubmit={addCustomDaily} class="flex gap-2">
+                            <input 
+                                type="text"
+                                placeholder="افزودن عادت یا مأموریت روزانه جدید..."
+                                value={newQuestTitle}
+                                onChange={(e) => setNewQuestTitle(e.target.value)}
+                                class="flex-1 bg-slate-950 border border-cyan-900/80 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-400"
+                            />
+                            <button
+                                type="submit"
+                                class="px-5 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-xl text-sm shadow-neon-blue flex items-center gap-1"
+                            >
+                                <i data-lucide="plus" class="w-4 h-4"></i>
+                                افزودن
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 5. QUEST BOARD TAB
+        // ==========================================
+        function QuestBoardTab({ quests, setQuests, addXPAndCrystals, addNotification, triggerSound, addLog }) {
+            const [title, setTitle] = useState('');
+            const [rank, setRank] = useState('C');
+            const [type, setType] = useState('main');
+
+            const rankRewards = {
+                E: { xp: 30, crystals: 15 },
+                D: { xp: 55, crystals: 30 },
+                C: { xp: 100, crystals: 50 },
+                B: { xp: 160, crystals: 85 },
+                A: { xp: 240, crystals: 130 },
+                S: { xp: 400, crystals: 220 }
+            };
+
+            const addQuest = (e) => {
+                e.preventDefault();
+                if (!title.trim()) return;
+                const rw = rankRewards[rank];
+                setQuests(prev => [{
+                    id: 'q_' + Date.now(),
+                    title: title.trim(),
+                    rank,
+                    type,
+                    xp: rw.xp,
+                    crystals: rw.crystals,
+                    completed: false
+                }, ...prev]);
+                setTitle('');
+                triggerSound('click');
+                addNotification('[مأموریت جدید]', `مأموریت رتبه ${rank} ثبت شد. برای شروع به تابلوی مأموریت‌ها بروید.`, 'quest');
+            };
+
+            const completeQuest = (id) => {
+                triggerSound('complete');
+                setQuests(prev => prev.map(q => {
+                    if (q.id === id) {
+                        addXPAndCrystals(q.xp, q.crystals);
+                        addLog(`تکمیل مأموریت رتبه ${q.rank}: «${q.title}»`, 'success');
+                        return { ...q, completed: true };
+                    }
+                    return q;
+                }));
+            };
+
+            return (
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <div class="system-panel rounded-2xl p-6">
+                        <h3 class="text-lg font-black text-cyan-300 mb-4 flex items-center gap-2">
+                            <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                            تعریف مأموریت جدید
+                        </h3>
+                        <form onSubmit={addQuest} class="space-y-4">
+                            <div>
+                                <label class="block text-xs text-slate-400 mb-1">عنوان هدف یا تکلیف:</label>
+                                <input 
+                                    type="text"
+                                    placeholder="مثلاً: اتمام جزوه معادلات، تمرین پروژه..."
+                                    value={title}
+                                    onChange={(e) => setTitle(e.target.value)}
+                                    class="w-full bg-slate-950 border border-cyan-900 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-400"
+                                />
+                            </div>
+
+                            <div class="grid grid-cols-2 gap-3">
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">رتبه (Rank):</label>
+                                    <select 
+                                        value={rank}
+                                        onChange={(e) => setRank(e.target.value)}
+                                        class="w-full bg-slate-950 border border-cyan-900 rounded-xl px-3 py-2.5 text-sm text-cyan-300 focus:outline-none focus:border-cyan-400"
+                                    >
+                                        {['E', 'D', 'C', 'B', 'A', 'S'].map(r => <option key={r} value={r}>Rank {r}</option>)}
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="block text-xs text-slate-400 mb-1">نوع:</label>
+                                    <select 
+                                        value={type}
+                                        onChange={(e) => setType(e.target.value)}
+                                        class="w-full bg-slate-950 border border-cyan-900 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-cyan-400"
+                                    >
+                                        <option value="main">مأموریت اصلی</option>
+                                        <option value="side">مأموریت فرعی</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="p-3 bg-slate-950/90 rounded-xl border border-cyan-900/60 text-xs flex justify-between">
+                                <span class="text-slate-400">پاداش پایه:</span>
+                                <span class="font-bold text-cyan-400">+{rankRewards[rank].xp} XP / 💎 {rankRewards[rank].crystals}</span>
+                            </div>
+
+                            <button type="submit" class="w-full py-3 bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-xl shadow-neon-blue transition-all">
+                                ثبت در تابلو
+                            </button>
+                        </form>
+                    </div>
+
+                    <div class="lg:col-span-2 system-panel rounded-2xl p-6">
+                        <h3 class="text-lg font-black text-cyan-300 mb-4 flex items-center gap-2">
+                            <i data-lucide="scroll" class="w-5 h-5"></i>
+                            تابلو مأموریت‌های درسی
+                        </h3>
+                        <div class="space-y-3">
+                            {quests.map(q => (
+                                <div 
+                                    key={q.id}
+                                    class={`p-4 rounded-xl border transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 ${
+                                        q.completed ? 'bg-slate-950/40 border-slate-800 opacity-60' : 'bg-slate-900/70 border-cyan-900/60 hover:border-cyan-400'
+                                    }`}
+                                >
+                                    <div class="flex items-center gap-3">
+                                        <span class={`font-black text-xs px-2.5 py-1 rounded-md border ${
+                                            q.rank === 'S' ? 'bg-amber-950 border-amber-400 text-amber-300 shadow-neon-gold' :
+                                            q.rank === 'A' ? 'bg-purple-950 border-purple-400 text-purple-300' :
+                                            'bg-cyan-950 border-cyan-400 text-cyan-300'
+                                        }`}>
+                                            Rank {q.rank}
+                                        </span>
+                                        <div>
+                                            <h4 class={`text-sm font-bold ${q.completed ? 'line-through text-slate-500' : 'text-slate-100'}`}>{q.title}</h4>
+                                            <span class="text-[10px] text-slate-400">{q.type === 'main' ? 'Main Quest' : 'Side Quest'}</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex items-center gap-3 justify-end">
+                                        <div class="text-xs font-bold text-left">
+                                            <div class="text-cyan-400">+{q.xp} XP</div>
+                                            <div class="text-amber-400">💎 {q.crystals}</div>
+                                        </div>
+                                        {!q.completed ? (
+                                            <button onClick={() => completeQuest(q.id)} class="px-3.5 py-1.5 bg-emerald-500 hover:bg-emerald-400 text-black text-xs font-black rounded-lg">
+                                                تکمیل
+                                            </button>
+                                        ) : (
+                                            <span class="text-xs text-emerald-400 font-bold px-2 py-1 bg-emerald-950 rounded">تکمیل شد</span>
+                                        )}
+                                        <button onClick={() => setQuests(prev => prev.filter(item => item.id !== q.id))} class="p-1.5 text-slate-500 hover:text-red-400">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 6. SYSTEM SHOP TAB
+        // ==========================================
+        function SystemShopTab({ player, setPlayer, shopItems, setShopItems, addNotification, triggerSound, setRewardClaimModal, addLog }) {
+            const [newTitle, setNewTitle] = useState('');
+            const [newCost, setNewCost] = useState(100);
+
+            const buyItem = (item) => {
+                if (player.manaCrystals < item.cost) {
+                    triggerSound('warning');
+                    addNotification('[سنگ مانا ناکافی]', 'برای خرید این پاداش باید سیاه‌چال‌های بیشتری را فتح کنید!', 'warning');
+                    return;
+                }
+                triggerSound('complete');
+                setPlayer(prev => ({ ...prev, manaCrystals: prev.manaCrystals - item.cost }));
+                addLog(`خرید از فروشگاه سیستم: «${item.title}» (${item.cost} سنگ مانا)`);
+                setRewardClaimModal(item);
+            };
+
+            const addCustomShopItem = (e) => {
+                e.preventDefault();
+                if (!newTitle.trim()) return;
+                setShopItems(prev => [...prev, {
+                    id: 's_' + Date.now(),
+                    title: newTitle.trim(),
+                    cost: Number(newCost) || 50,
+                    icon: 'gift',
+                    desc: 'پاداش اختصاصی بازیکن'
+                }]);
+                setNewTitle('');
+                setNewCost(100);
+                triggerSound('click');
+                addNotification('[فروشگاه به‌روز شد]', 'آیتم پاداش جدید اضافه شد.', 'info');
+            };
+
+            return (
+                <div class="space-y-6">
+                    <div class="system-panel rounded-2xl p-6 border-amber-500/40 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4">
+                            <div class="w-14 h-14 rounded-2xl bg-amber-950 border-2 border-amber-400 flex items-center justify-center shadow-neon-gold shrink-0">
+                                <i data-lucide="gem" class="w-8 h-8 text-amber-300"></i>
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-black text-amber-300 glow-text-gold">فروشگاه سیستم (System Shop)</h3>
+                                <p class="text-xs text-slate-300">تبدیل سنگ‌های مانا به استراحت و پاداش‌های واقعی</p>
+                            </div>
+                        </div>
+                        <div class="bg-slate-950 px-6 py-3 rounded-2xl border border-amber-500/40 text-center">
+                            <span class="text-xs text-slate-400 block">موجودی فعلی:</span>
+                            <span class="text-2xl font-black text-amber-300 glow-text-gold">💎 {player.manaCrystals}</span>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        {shopItems.map(item => (
+                            <div key={item.id} class="system-panel rounded-2xl p-5 hover:border-amber-400 transition-all flex flex-col justify-between">
+                                <div>
+                                    <div class="w-12 h-12 rounded-xl bg-cyan-950 border border-cyan-500/40 flex items-center justify-center text-amber-300 mb-3">
+                                        <i data-lucide={item.icon || 'gift'} class="w-6 h-6"></i>
+                                    </div>
+                                    <h4 class="font-bold text-slate-100 text-sm mb-1">{item.title}</h4>
+                                    <p class="text-xs text-slate-400 mb-4">{item.desc}</p>
+                                </div>
+                                <div class="pt-3 border-t border-slate-800 flex items-center justify-between">
+                                    <span class="text-amber-300 font-black text-sm">💎 {item.cost}</span>
+                                    <button
+                                        onClick={() => buyItem(item)}
+                                        class="px-4 py-2 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-black text-xs rounded-xl shadow-neon-gold"
+                                    >
+                                        خرید
+                                    </button>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    <div class="system-panel rounded-2xl p-6">
+                        <h3 class="text-sm font-black text-cyan-300 mb-3">تعریف پاداش جدید:</h3>
+                        <form onSubmit={addCustomShopItem} class="flex flex-col sm:flex-row gap-3">
+                            <input 
+                                type="text"
+                                placeholder="نام پاداش (مثلاً: خرید کتاب جدید، گردش با دوستان...)"
+                                value={newTitle}
+                                onChange={(e) => setNewTitle(e.target.value)}
+                                class="flex-1 bg-slate-950 border border-cyan-900 rounded-xl px-4 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-cyan-400"
+                            />
+                            <input 
+                                type="number"
+                                value={newCost}
+                                onChange={(e) => setNewCost(e.target.value)}
+                                class="w-full sm:w-32 bg-slate-950 border border-cyan-900 rounded-xl px-3 py-2.5 text-sm text-amber-300 focus:outline-none focus:border-cyan-400"
+                            />
+                            <button type="submit" class="px-6 py-2.5 bg-cyan-500 hover:bg-cyan-400 text-black font-black rounded-xl text-sm shadow-neon-blue">
+                                افزودن
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // V6. STUDY-FIRST COMMAND HUB
+        // ==========================================
+        function StudyFirstHub({ studySessions, setStudySessions, studyHub, setStudyHub, addXPAndCrystals, addNotification, addLog, triggerSound }) {
+            const subjects = ['ریاضی','فیزیک','شیمی','زیست‌شناسی','عمومی','سایر'];
+            const [subject,setSubject] = useState('ریاضی');
+            const [topic,setTopic] = useState('');
+            const [minutes,setMinutes] = useState(25);
+            const [secondsLeft,setSecondsLeft] = useState(25*60);
+            const [running,setRunning] = useState(false);
+            const [taskText,setTaskText] = useState('');
+            const [showReview,setShowReview] = useState(false);
+
+            const tasks = Array.isArray(studyHub.tasks) ? studyHub.tasks : createInitialStudyTasks();
+            const setTasks = (updater) => {
+                setStudyHub(prev => {
+                    const currentTasks = Array.isArray(prev.tasks) ? prev.tasks : createInitialStudyTasks();
+                    const nextTasks = typeof updater === 'function' ? updater(currentTasks) : updater;
+                    return { ...prev, tasks: nextTasks };
+                });
+            };
+
+            useEffect(()=>{ 
+                if(!running) return; 
+                const id=setInterval(()=>setSecondsLeft(v=>{
+                    if(v<=1){
+                        clearInterval(id);
+                        setRunning(false);
+                        triggerSound('complete');
+                        addNotification('[جلسه تمرکز تمام شد]','اگر واقعاً مطالعه کردی، جلسه را ثبت کن. اگر نه، می‌توانی استراحت کنی یا ادامه بدهی.','success');
+                        return 0;
+                    }
+                    return v-1;
+                }),1000);
+                return ()=>clearInterval(id);
+            },[running]);
+
+            const today=new Date();
+            const dayStart=new Date(today.getFullYear(),today.getMonth(),today.getDate()).getTime();
+            const todaySessions=studySessions.filter(x=>new Date(x.date).getTime()>=dayStart);
+            const todayMinutes=todaySessions.reduce((a,x)=>a+(Number(x.minutes)||0),0);
+            const weekStart=Date.now()-7*24*60*60*1000;
+            const weekSessions=studySessions.filter(x=>new Date(x.date).getTime()>=weekStart);
+            const weekMinutes=weekSessions.reduce((a,x)=>a+(Number(x.minutes)||0),0);
+            const done=tasks.filter(t=>t.done).length;
+            const fmt=n=>`${String(Math.floor(n/60)).padStart(2,'0')}:${String(n%60).padStart(2,'0')}`;
+            const start=()=>{if(secondsLeft===0)setSecondsLeft(minutes*60);setRunning(true);triggerSound('click');};
+            const reset=()=>{setRunning(false);setSecondsLeft(minutes*60);};
+            const saveSession=()=>{
+                const actual=Math.max(1,Math.min(240,Number(minutes)||25));
+                const record={id:Date.now(),subject,topic:topic.trim()||'مطالعه آزاد',minutes:actual,date:new Date().toISOString(),kind:'focus'};
+                setStudySessions(prev=>[record,...prev]);
+                const xp=Math.min(100,Math.max(8,Math.round(actual*0.8)));
+                addXPAndCrystals(xp,Math.max(2,Math.round(actual/10)));
+                addLog(`جلسه مطالعه ثبت شد: ${subject}، ${record.topic}، ${actual} دقیقه`,'success');
+                addNotification('[مطالعه ثبت شد]',`${actual} دقیقه ${subject} ثبت شد. پاداش فقط برای زمانی است که واقعاً مطالعه کردی.`,'success');
+                setTopic('');setRunning(false);setSecondsLeft(minutes*60);
+            };
+            const addTask=()=>{const v=taskText.trim();if(!v)return;setTasks(t=>[...t,{id:Date.now(),text:v,subject,done:false}]);setTaskText('');};
+            const toggleTask=id=>setTasks(t=>t.map(x=>x.id===id?{...x,done:!x.done}:x));
+            const resetTasks=()=>setTasks(t=>t.map(x=>({...x,done:false})));
+            const pct=minutes>0?Math.round((1-secondsLeft/(minutes*60))*100):0;
+
+            return <div class="space-y-5 animate-arise">
+                <section class="system-panel rounded-2xl p-5 md:p-7 border border-cyan-300/50" style={{background:'radial-gradient(ellipse at 85% 0%,rgba(0,190,255,.18),transparent 48%),linear-gradient(135deg,rgba(8,29,58,.98),rgba(4,10,25,.98))'}}>
+                    <div class="flex flex-wrap items-center justify-between gap-2"><span class="text-[10px] tracking-[.25em] text-cyan-300 font-black">SYSTEM V6 // REAL PROGRESS PROTOCOL</span><span class="text-[10px] rounded-full border border-emerald-400/40 bg-emerald-950/40 px-3 py-1 text-emerald-300">STUDY FIRST</span></div>
+                    <h2 class="text-2xl md:text-3xl font-black text-white mt-3">مرکز فرماندهی مطالعه</h2>
+                    <p class="text-sm text-slate-300 mt-2 max-w-2xl">مأموریت امروزت را انتخاب کن، یک جلسه واقعی مطالعه انجام بده و پیشرفتت را ثبت کن. بازی فقط بازتاب تلاش واقعی توست.</p>
+                    <div class="grid grid-cols-3 gap-2 mt-5">
+                        <div class="rounded-xl bg-black/35 p-3 text-center"><div class="text-[10px] text-slate-400">مطالعه امروز</div><div class="text-xl md:text-2xl font-black text-cyan-300">{todayMinutes}<small class="text-xs mr-1">دقیقه</small></div></div>
+                        <div class="rounded-xl bg-black/35 p-3 text-center"><div class="text-[10px] text-slate-400">جلسات امروز</div><div class="text-xl md:text-2xl font-black text-purple-300">{todaySessions.length}</div></div>
+                        <div class="rounded-xl bg-black/35 p-3 text-center"><div class="text-[10px] text-slate-400">مطالعه ۷ روز</div><div class="text-xl md:text-2xl font-black text-amber-300">{weekMinutes}<small class="text-xs mr-1">دقیقه</small></div></div>
+                    </div>
+                </section>
+                <section class="grid grid-cols-1 lg:grid-cols-[1.15fr_.85fr] gap-4">
+                    <div class="system-panel rounded-2xl p-5 md:p-6">
+                        <div class="flex items-center justify-between"><div><div class="text-[10px] tracking-widest text-cyan-300 font-black">TRAINING ROOM</div><h3 class="text-xl font-black text-white mt-1">اتاق تمرین</h3></div><i data-lucide="timer" class="w-7 h-7 text-cyan-300"></i></div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-4">
+                            <label class="text-xs text-slate-300">درس<select value={subject} onChange={e=>setSubject(e.target.value)} disabled={running} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3">{subjects.map(x=><option key={x}>{x}</option>)}</select></label>
+                            <label class="text-xs text-slate-300">مدت جلسه (دقیقه)<input type="number" min="1" max="240" value={minutes} disabled={running} onChange={e=>{const v=Math.max(1,Math.min(240,Number(e.target.value)||1));setMinutes(v);setSecondsLeft(v*60);}} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label>
+                        </div>
+                        <label class="block text-xs text-slate-300 mt-3">مبحث یا هدف جلسه<input value={topic} onChange={e=>setTopic(e.target.value)} placeholder="مثلاً: حل تمرین تابع" class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label>
+                        <div class="text-center py-5"><div class="text-5xl md:text-6xl font-black tracking-wider text-cyan-200" style={{textShadow:'0 0 22px rgba(34,211,238,.45)'}}>{fmt(secondsLeft)}</div><div class="text-[10px] text-slate-500 mt-2">{running?'FOCUS SESSION IN PROGRESS':secondsLeft===0?'SESSION TIMER COMPLETE':'READY TO BEGIN'}</div><div class="h-1.5 bg-slate-800 rounded-full mt-4 overflow-hidden"><div class="h-full bg-cyan-400 transition-all" style={{width:`${pct}%`}}></div></div></div>
+                        <div class="flex gap-2"><button onClick={start} disabled={running} class="flex-1 rounded-xl py-3 bg-cyan-400 text-slate-950 font-black disabled:opacity-40">{secondsLeft===0?'شروع دوباره':'شروع تمرکز'}</button><button onClick={()=>setRunning(false)} disabled={!running} class="px-4 rounded-xl border border-amber-400/40 text-amber-200 disabled:opacity-30">مکث</button><button onClick={reset} class="px-4 rounded-xl border border-slate-600 text-slate-300">بازنشانی</button></div>
+                        {secondsLeft===0&&!running&&<button onClick={saveSession} class="w-full mt-3 rounded-xl py-3 bg-emerald-500 text-slate-950 font-black">مطالعه واقعی انجام شد؛ ثبت جلسه و دریافت XP</button>}
+                        {secondsLeft>0&&!running&&<button onClick={saveSession} class="w-full mt-3 rounded-xl py-2.5 border border-emerald-500/40 text-emerald-300 text-xs">ثبت دستی جلسه (اگر مطالعه را انجام داده‌ام)</button>}
+                        <p class="text-[10px] text-slate-500 mt-3">تایمر ابزار تمرکز است، نه اثبات مطالعه. فقط زمان واقعی مطالعه را ثبت کن؛ می‌توانی هر زمان مکث کنی.</p>
+                    </div>
+                    <div class="system-panel rounded-2xl p-5">
+                        <div class="flex items-center justify-between"><div><div class="text-[10px] tracking-widest text-amber-300 font-black">DAILY QUESTS</div><h3 class="text-xl font-black text-white mt-1">مأموریت‌های امروز</h3></div><span class="text-sm font-black text-cyan-300">{done}/{tasks.length}</span></div>
+                        <div class="h-2 bg-slate-800 rounded-full mt-4 overflow-hidden"><div class="h-full bg-gradient-to-r from-cyan-500 to-emerald-400" style={{width:`${tasks.length?done/tasks.length*100:0}%`}}></div></div>
+                        <div class="space-y-2 mt-4">{tasks.map(t=><label key={t.id} class="flex items-start gap-3 p-3 rounded-xl bg-slate-950/70 border border-slate-800 cursor-pointer"><input type="checkbox" checked={!!t.done} onChange={()=>toggleTask(t.id)} class="mt-1 accent-cyan-400"/><span class={`text-xs leading-6 ${t.done?'line-through text-slate-600':'text-slate-200'}`}>{t.text}<small class="block text-[10px] text-slate-500">{t.subject||'شخصی'}</small></span></label>)}</div>
+                        <div class="flex gap-2 mt-3"><input value={taskText} onChange={e=>setTaskText(e.target.value)} onKeyDown={e=>e.key==='Enter'&&addTask()} placeholder="مأموریت جدید..." class="min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs"/><button onClick={addTask} class="px-4 rounded-lg bg-cyan-900 text-cyan-200 border border-cyan-500/40">افزودن</button></div>
+                        <button onClick={resetTasks} class="text-[10px] text-slate-500 mt-3 hover:text-slate-300">بازنشانی تیک‌های مأموریت</button>
+                    </div>
+                </section>
+                <section class="system-panel rounded-2xl p-5">
+                    <div class="flex flex-wrap items-center justify-between gap-2"><div><div class="text-[10px] tracking-widest text-purple-300 font-black">WEEKLY EVALUATION</div><h3 class="text-xl font-black text-white mt-1">گزارش پیشرفت واقعی</h3></div><button onClick={()=>setShowReview(v=>!v)} class="text-xs border border-purple-400/40 text-purple-200 rounded-lg px-3 py-2">{showReview?'بستن گزارش':'نمایش گزارش هفتگی'}</button></div>
+                    {showReview&&<div class="grid grid-cols-2 md:grid-cols-4 gap-2 mt-4"><div class="rounded-xl bg-slate-950 p-3"><div class="text-[10px] text-slate-500">زمان مطالعه</div><div class="text-xl font-black text-cyan-300">{weekMinutes} دقیقه</div></div><div class="rounded-xl bg-slate-950 p-3"><div class="text-[10px] text-slate-500">تعداد جلسات</div><div class="text-xl font-black text-purple-300">{weekSessions.length}</div></div><div class="rounded-xl bg-slate-950 p-3"><div class="text-[10px] text-slate-500">میانگین جلسه</div><div class="text-xl font-black text-amber-300">{weekSessions.length?Math.round(weekMinutes/weekSessions.length):0} دقیقه</div></div><div class="rounded-xl bg-slate-950 p-3"><div class="text-[10px] text-slate-500">مأموریت‌های امروز</div><div class="text-xl font-black text-emerald-300">{done}/{tasks.length}</div></div></div>}
+                    <div class="mt-4"><h4 class="text-sm font-bold text-slate-200">آخرین جلسات ثبت‌شده</h4>{studySessions.length?<div class="space-y-2 mt-2 max-h-64 overflow-y-auto">{studySessions.slice(0,8).map(x=><div key={x.id} class="flex items-center justify-between gap-3 rounded-lg bg-slate-950/70 p-3"><div><div class="text-xs text-white font-bold">{x.subject} • {x.topic||'مطالعه'}</div><div class="text-[10px] text-slate-500 mt-1">{new Date(x.date).toLocaleString('fa-IR')}</div></div><div class="text-sm font-black text-cyan-300">{x.minutes} دقیقه</div></div>)}</div>:<p class="text-xs text-slate-500 py-4">هنوز جلسه‌ای ثبت نشده؛ اولین جلسه‌ات را از اتاق تمرین شروع کن.</p>}</div>
+                </section>
+                <div class="text-center text-[10px] text-slate-600">قانون سیستم: یادگیری واقعی مهم‌تر از Level، XP و هر جایزه‌ای است. استراحت و انعطاف بخشی از برنامه‌اند.</div>
+            </div>;
+        }
+
+        // ==========================================
+        // V4. ADAPTIVE STUDY PLANNER
+        // ==========================================
+        function AdaptiveStudyPlanner({ data, setData, studySessions, addXPAndCrystals, addNotification, addLog }) {
+            const [subjectInput, setSubjectInput] = useState('');
+            const [weeklySubject, setWeeklySubject] = useState('ریاضی');
+            const [weeklyDay, setWeeklyDay] = useState('شنبه');
+            const [weeklyMinutes, setWeeklyMinutes] = useState(45);
+            const [gradeSubject, setGradeSubject] = useState('ریاضی');
+            const [gradeValue, setGradeValue] = useState('');
+            const [gradeNote, setGradeNote] = useState('');
+
+            const now = new Date();
+            const todayKey = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+            const weekAgo = Date.now() - 7*24*60*60*1000;
+            const recent = studySessions.filter(x => new Date(x.date).getTime() >= weekAgo);
+            const recentMinutes = recent.reduce((a,x) => a + (Number(x.minutes)||0), 0);
+            const average = recent.length ? Math.round(recentMinutes / recent.length) : 0;
+            const level = recentMinutes < 120 ? 'starter' : recentMinutes < 360 ? 'steady' : 'advanced';
+            const target = level === 'starter' ? 25 : level === 'steady' ? 35 : 45;
+            const targetLabel = level === 'starter' ? 'شروع آرام' : level === 'steady' ? 'ریتم پایدار' : 'تمرکز عمیق';
+            const missions = [
+                { id:'focus', title:`یک نوبت تمرکز ${target} دقیقه‌ای`, desc:'یک مبحث مشخص انتخاب کن و فقط روی همان کار بمان.', mins:target, xp:35 },
+                { id:'review', title:'مرور فعال ۱۵ دقیقه‌ای', desc:'بدون نگاه‌کردن به جزوه، نکات مهم را از حافظه بازیابی کن.', mins:15, xp:20 },
+                { id:'practice', title:'تمرین یا تست هدفمند', desc:'چند سؤال متناسب با مبحث امروز حل کن و اشتباه‌ها را بررسی کن.', mins:20, xp:25 }
+            ];
+            const doneToday = missions.filter(m => data.completed[`${todayKey}_${m.id}`]).length;
+            const finishMission = m => {
+                const key = `${todayKey}_${m.id}`;
+                if (data.completed[key]) return;
+                setData(d => ({...d, completed:{...d.completed,[key]:true}}));
+                addXPAndCrystals(m.xp, 10);
+                addLog(`مأموریت هوشمند تکمیل شد: ${m.title}`);
+                addNotification('[مأموریت تکمیل شد]', `+${m.xp} XP برای ${m.title}`, 'success');
+            };
+            const addSubject = () => {
+                const value = subjectInput.trim();
+                if (!value || data.subjects.includes(value)) return;
+                setData(d => ({...d, subjects:[...d.subjects,value]})); setSubjectInput('');
+            };
+            const addWeekly = () => {
+                if (!weeklySubject) return;
+                setData(d => ({...d, weekly:[...d.weekly,{id:Date.now(),subject:weeklySubject,day:weeklyDay,minutes:Number(weeklyMinutes)}]}));
+            };
+            const addGrade = () => {
+                const n = Number(gradeValue);
+                if (!gradeSubject || gradeValue === '' || !Number.isFinite(n) || n < 0 || n > 20) return;
+                setData(d => ({...d, grades:[{id:Date.now(),subject:gradeSubject,score:n,note:gradeNote.trim(),date:todayKey},...d.grades]}));
+                setGradeValue(''); setGradeNote('');
+            };
+            const subjectMinutes = data.subjects.map(subject => ({subject, minutes:recent.filter(x=>x.subject===subject).reduce((a,x)=>a+(Number(x.minutes)||0),0)}));
+            const weakest = [...subjectMinutes].sort((a,b)=>a.minutes-b.minutes)[0];
+            const days = ['شنبه','یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه'];
+            return (
+                <div class="space-y-5 animate-arise">
+                    <section class="system-panel monarch-panel rounded-2xl p-5 md:p-6 overflow-hidden">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                            <div><div class="text-[10px] tracking-[.25em] text-cyan-300 font-black mb-2">SYSTEM V4 // ADAPTIVE TRAINING</div>
+                                <h2 class="text-2xl md:text-3xl font-black text-white glow-text">مرکز برنامه‌ریزی هوشمند</h2>
+                                <p class="text-sm text-slate-300 mt-2">مأموریت‌ها بر اساس فعالیت هفت روز اخیر تنظیم می‌شوند؛ هدف، پیشرفت پیوسته و قابل‌دوام است.</p>
+                            </div>
+                            <div class="bg-black/35 border border-cyan-400/30 rounded-2xl p-4 min-w-[150px] text-center">
+                                <div class="text-[10px] text-cyan-200">ADAPTIVE MODE</div><div class="text-xl font-black text-white mt-1">{targetLabel}</div>
+                                <div class="text-xs text-slate-400 mt-1">{target} دقیقه تمرکز</div>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-3 gap-2 mt-5">
+                            <div class="rounded-xl bg-black/30 p-3 text-center"><div class="text-[10px] text-slate-400">مطالعه ۷ روز اخیر</div><div class="text-xl font-black text-cyan-300">{recentMinutes}<span class="text-xs mr-1">دقیقه</span></div></div>
+                            <div class="rounded-xl bg-black/30 p-3 text-center"><div class="text-[10px] text-slate-400">جلسات ثبت‌شده</div><div class="text-xl font-black text-purple-300">{recent.length}</div></div>
+                            <div class="rounded-xl bg-black/30 p-3 text-center"><div class="text-[10px] text-slate-400">میانگین هر جلسه</div><div class="text-xl font-black text-amber-300">{average}<span class="text-xs mr-1">دقیقه</span></div></div>
+                        </div>
+                    </section>
+
+                    <section class="system-panel rounded-2xl p-5">
+                        <div class="flex items-center justify-between gap-3 mb-4"><div><div class="text-[10px] text-cyan-400 font-black">DAILY PROTOCOL</div><h3 class="text-lg font-black text-white">مأموریت‌های امروز</h3></div><div class="text-xs text-cyan-200">{doneToday}/{missions.length} تکمیل</div></div>
+                        <div class="h-2 bg-slate-950 rounded-full overflow-hidden mb-4"><div class="h-full bg-gradient-to-r from-cyan-500 to-purple-500" style={{width:`${doneToday/missions.length*100}%`}}></div></div>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            {missions.map(m => <div key={m.id} class={`rounded-xl border p-4 ${data.completed[`${todayKey}_${m.id}`]?'bg-emerald-950/30 border-emerald-700/50':'bg-slate-950/70 border-slate-800'}`}>
+                                <div class="flex items-center justify-between mb-3"><span class="text-[10px] text-cyan-300 font-black">{m.mins} MIN</span><span class="text-[10px] text-amber-300">+{m.xp} XP</span></div>
+                                <h4 class="font-bold text-sm text-white">{m.title}</h4><p class="text-xs text-slate-400 leading-6 mt-2 min-h-[48px]">{m.desc}</p>
+                                <button disabled={!!data.completed[`${todayKey}_${m.id}`]} onClick={()=>finishMission(m)} class={`w-full mt-3 rounded-lg py-2 text-xs font-black ${data.completed[`${todayKey}_${m.id}`]?'bg-emerald-900/50 text-emerald-300':'bg-cyan-500 text-slate-950 hover:bg-cyan-300'}`}>{data.completed[`${todayKey}_${m.id}`]?'✓ تکمیل شد':'ثبت انجام مأموریت'}</button>
+                            </div>)}
+                        </div>
+                        <p class="text-[10px] text-slate-500 mt-3">ثبت مأموریت به‌صورت دستی است؛ سیستم زمان واقعی مطالعه را فقط از سیاه‌چال‌های کامل‌شده دریافت می‌کند.</p>
+                    </section>
+
+                    <section class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+                        <div class="system-panel rounded-2xl p-5">
+                            <h3 class="font-black text-purple-200 mb-1">برنامه هفتگی</h3><p class="text-[10px] text-slate-500 mb-4">برای هر روز، درس و مدت پیشنهادی اضافه کن.</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <select value={weeklyDay} onChange={e=>setWeeklyDay(e.target.value)} class="bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">{days.map(d=><option key={d}>{d}</option>)}</select>
+                                <select value={weeklySubject} onChange={e=>setWeeklySubject(e.target.value)} class="bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">{data.subjects.map(x=><option key={x}>{x}</option>)}</select>
+                                <input type="number" min="10" max="180" step="5" value={weeklyMinutes} onChange={e=>setWeeklyMinutes(e.target.value)} class="bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs" placeholder="دقیقه" />
+                                <button onClick={addWeekly} class="rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold">+ افزودن به برنامه</button>
+                            </div>
+                            <div class="space-y-2 mt-4 max-h-64 overflow-y-auto">{days.map(day=>{const items=data.weekly.filter(x=>x.day===day); return <div key={day} class="rounded-lg bg-slate-950/70 border border-slate-800 p-3"><div class="text-xs font-black text-cyan-200 mb-2">{day}</div>{items.length?items.map(item=><div key={item.id} class="flex items-center justify-between text-xs py-1"><span class="text-slate-200">{item.subject} • {item.minutes} دقیقه</span><button onClick={()=>setData(d=>({...d,weekly:d.weekly.filter(x=>x.id!==item.id)}))} class="text-red-400 px-2">حذف</button></div>):<div class="text-[10px] text-slate-600">هنوز برنامه‌ای ثبت نشده</div>}</div>})}</div>
+                        </div>
+                        <div class="system-panel rounded-2xl p-5">
+                            <h3 class="font-black text-cyan-200 mb-1">تشخیص درس کم‌تمرین</h3><p class="text-[10px] text-slate-500 mb-4">بر اساس زمان ثبت‌شده در هفت روز اخیر؛ کم بودن زمان لزوماً به معنی ضعف علمی نیست.</p>
+                            <div class="rounded-xl bg-cyan-950/30 border border-cyan-500/30 p-4 mb-4"><div class="text-[10px] text-cyan-300">پیشنهاد فعلی سیستم</div><div class="text-xl font-black text-white mt-1">{weakest?.subject || '—'}</div><div class="text-xs text-slate-400 mt-1">{weakest?.minutes || 0} دقیقه ثبت‌شده در هفته اخیر</div></div>
+                            <div class="space-y-3">{subjectMinutes.map(x=><div key={x.subject}><div class="flex justify-between text-xs mb-1"><span>{x.subject}</span><span class="text-cyan-300">{x.minutes} دقیقه</span></div><div class="h-2 rounded-full bg-slate-950 overflow-hidden"><div class="h-full bg-gradient-to-r from-purple-600 to-cyan-400" style={{width:`${recentMinutes?Math.max(3,x.minutes/Math.max(1,...subjectMinutes.map(z=>z.minutes))*100):0}%`}}></div></div></div>)}</div>
+                            <div class="flex gap-2 mt-4"><input value={subjectInput} onChange={e=>setSubjectInput(e.target.value)} placeholder="افزودن نام درس..." class="min-w-0 flex-1 bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs"/><button onClick={addSubject} class="px-3 rounded-lg bg-cyan-700 text-white text-xs font-bold">افزودن</button></div>
+                        </div>
+                    </section>
+
+                    <section class="system-panel rounded-2xl p-5">
+                        <h3 class="font-black text-amber-200 mb-1">پرونده آزمون‌ها و نمرات</h3><p class="text-[10px] text-slate-500 mb-4">نمره‌ها را ثبت کن تا روند پیشرفتت را در طول زمان ببینی.</p>
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-2">
+                            <select value={gradeSubject} onChange={e=>setGradeSubject(e.target.value)} class="bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs">{data.subjects.map(x=><option key={x}>{x}</option>)}</select>
+                            <input type="number" min="0" max="20" step="0.25" value={gradeValue} onChange={e=>setGradeValue(e.target.value)} placeholder="نمره از ۲۰" class="bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs"/>
+                            <input value={gradeNote} onChange={e=>setGradeNote(e.target.value)} placeholder="نام آزمون (اختیاری)" class="bg-slate-950 border border-slate-700 rounded-lg p-2 text-xs"/>
+                            <button onClick={addGrade} class="rounded-lg bg-amber-500 text-black font-black text-xs">ثبت نمره</button>
+                        </div>
+                        <div class="mt-4 space-y-2 max-h-64 overflow-y-auto">{data.grades.length?data.grades.map(g=><div key={g.id} class="flex items-center justify-between gap-3 bg-slate-950/70 border border-slate-800 rounded-lg p-3"><div><div class="text-xs font-bold text-white">{g.subject} <span class="text-slate-500 font-normal">{g.note}</span></div><div class="text-[10px] text-slate-500 mt-1">{g.date}</div></div><div class={`text-lg font-black ${g.score>=18?'text-emerald-300':g.score>=14?'text-amber-300':'text-rose-300'}`}>{g.score}/20</div><button onClick={()=>setData(d=>({...d,grades:d.grades.filter(x=>x.id!==g.id)}))} class="text-red-400 text-xs">حذف</button></div>):<div class="text-xs text-slate-600 py-4 text-center">هنوز نمره‌ای ثبت نشده است.</div>}</div>
+                    </section>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // V5. AWAKENING SKILL TREE + EXAM BOSS ARENA
+        // ==========================================
+        function AwakeningArena({ player, setPlayer, skillTree, setSkillTree, bossHistory, setBossHistory, addXPAndCrystals, addNotification, addLog, triggerSound }) {
+            const [subject, setSubject] = useState('ریاضی');
+            const [examTitle, setExamTitle] = useState('آزمون تمرینی');
+            const [total, setTotal] = useState(20);
+            const [correct, setCorrect] = useState(15);
+            const [minutes, setMinutes] = useState(45);
+            const [tab, setTab] = useState('skills');
+            const skills = [
+                {id:'focus',name:'تمرکز شکارچی',branch:'ذهن',icon:'crosshair',desc:'افزایش پاداش XP سیاه‌چال‌ها',effect:'+۲٪ XP به‌ازای هر سطح',cost:60,max:5,color:'cyan'},
+                {id:'memory',name:'حافظه آهنین',branch:'ذهن',icon:'brain',desc:'افزایش سنگ مانا از پاکسازی سیاه‌چال',effect:'+۲٪ سنگ مانا به‌ازای هر سطح',cost:60,max:5,color:'purple'},
+                {id:'discipline',name:'انضباط پایدار',branch:'نظم',icon:'shield-check',desc:'پاداش اضافه برای تکمیل باس‌فایت‌ها',effect:'+۵٪ XP باس به‌ازای هر سطح',cost:80,max:4,color:'amber'},
+                {id:'stamina',name:'استقامت ذهنی',branch:'پایداری',icon:'flame',desc:'مسیر ارتقای پایداری و مدیریت انرژی مطالعه',effect:'مهارت پایداری • حداکثر ۴ سطح',cost:70,max:4,color:'rose'},
+                {id:'analysis',name:'تحلیل‌گر نبرد',branch:'دانش',icon:'scan-search',desc:'پاداش بیشتر برای عملکرد دقیق در آزمون‌ها',effect:'+۳٪ XP باس به‌ازای هر سطح',cost:90,max:4,color:'blue'}
+            ];
+            const levelOf = id => Number(skillTree[id] || 0);
+            const buySkill = skill => {
+                const current = levelOf(skill.id);
+                const price = skill.cost * (current + 1);
+                if (current >= skill.max) return;
+                if (player.manaCrystals < price) { addNotification('[مانای ناکافی]','برای ارتقای این مهارت سنگ مانای بیشتری لازم است.','warning'); return; }
+                setPlayer(p=>({...p,manaCrystals:p.manaCrystals-price}));
+                setSkillTree(t=>({...t,[skill.id]:current+1}));
+                triggerSound('levelUp'); addLog(`مهارت ${skill.name} به سطح ${current+1} ارتقا یافت.`,'success');
+                addNotification('[SKILL UPGRADED]',`${skill.name} به سطح ${current+1} رسید.`,'success');
+            };
+            const submitBoss = () => {
+                const t=Math.max(1,Math.min(200,Number(total)||1));
+                const c=Math.max(0,Math.min(t,Number(correct)||0));
+                const m=Math.max(1,Math.min(600,Number(minutes)||1));
+                const accuracy=Math.round(c/t*100);
+                const baseXP=Math.round(25+accuracy*1.25+Math.min(m,120)*0.35);
+                const bonus=Math.round(baseXP*(levelOf('discipline')*.05+levelOf('analysis')*.03));
+                const xp=baseXP+bonus;
+                const crystals=Math.max(5,Math.round(accuracy/10));
+                const record={id:Date.now(),subject,title:examTitle.trim()||'نبرد دانشی',total:t,correct:c,minutes:m,accuracy,xp,crystals,date:new Date().toLocaleDateString('fa-IR')};
+                setBossHistory(h=>[record,...h].slice(0,100));
+                addXPAndCrystals(xp,crystals);
+                addLog(`باس‌فایت ${record.title} در درس ${subject}: دقت ${accuracy}٪`,'success');
+                triggerSound(accuracy>=80?'levelUp':'reward');
+                addNotification('[BOSS DEFEATED]',`دقت ${accuracy}٪ | +${xp} XP | +${crystals} سنگ مانا`,'success');
+            };
+            const average=bossHistory.length?Math.round(bossHistory.reduce((a,x)=>a+x.accuracy,0)/bossHistory.length):0;
+            const skillXPBonus=levelOf('focus')*2;
+            const skillCrystalBonus=levelOf('memory')*2;
+            return <div class="space-y-5 animate-arise">
+                <section class="system-panel monarch-panel rounded-2xl p-5 md:p-6">
+                    <div class="text-[10px] tracking-[.25em] text-amber-300 font-black">SYSTEM V5 // AWAKENING PROTOCOL</div>
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-3 mt-2"><div><h2 class="text-2xl md:text-3xl font-black text-white glow-text">درخت مهارت و میدان باس‌فایت</h2><p class="text-xs text-slate-300 mt-2">توانایی‌ها را با سنگ مانا ارتقا بده و دانش خودت را در نبردهای آزمونی بسنج.</p></div><div class="rounded-xl border border-amber-400/40 bg-amber-950/30 px-4 py-3"><div class="text-[10px] text-amber-200">MANA CRYSTALS</div><div class="text-2xl font-black text-amber-300">💎 {player.manaCrystals}</div></div></div>
+                    <div class="grid grid-cols-3 gap-2 mt-5"><div class="rounded-xl bg-black/30 p-3 text-center"><div class="text-[10px] text-slate-400">مهارت‌های ارتقایافته</div><div class="text-xl font-black text-cyan-300">{skills.filter(x=>levelOf(x.id)>0).length}/5</div></div><div class="rounded-xl bg-black/30 p-3 text-center"><div class="text-[10px] text-slate-400">نبردهای ثبت‌شده</div><div class="text-xl font-black text-purple-300">{bossHistory.length}</div></div><div class="rounded-xl bg-black/30 p-3 text-center"><div class="text-[10px] text-slate-400">میانگین دقت</div><div class="text-xl font-black text-amber-300">{average}٪</div></div></div>
+                </section>
+                <div class="flex gap-2"><button onClick={()=>setTab('skills')} class={`flex-1 rounded-xl py-3 text-sm font-black border ${tab==='skills'?'bg-cyan-950 border-cyan-400 text-cyan-200':'bg-slate-900 border-slate-700 text-slate-400'}`}>✦ Skill Tree</button><button onClick={()=>setTab('boss')} class={`flex-1 rounded-xl py-3 text-sm font-black border ${tab==='boss'?'bg-red-950 border-red-400 text-red-200':'bg-slate-900 border-slate-700 text-slate-400'}`}>⚔ Boss Battle</button></div>
+                {tab==='skills' && <section class="system-panel rounded-2xl p-5"><div class="flex items-center justify-between mb-4"><div><div class="text-[10px] text-cyan-300 font-black">PLAYER DEVELOPMENT</div><h3 class="text-lg font-black text-white">شبکه توانایی‌ها</h3></div><span class="text-[10px] text-slate-500">هزینه هر سطح افزایش می‌یابد</span></div><div class="grid grid-cols-1 md:grid-cols-2 gap-3">{skills.map(skill=>{const lv=levelOf(skill.id),price=skill.cost*(lv+1),maxed=lv>=skill.max;return <div key={skill.id} class="relative overflow-hidden rounded-xl border border-slate-700 bg-slate-950/80 p-4"><div class="flex items-start justify-between gap-3"><div class="flex items-center gap-3"><div class="w-11 h-11 rounded-xl border border-cyan-500/40 bg-cyan-950/60 flex items-center justify-center text-cyan-300"><i data-lucide={skill.icon} class="w-5 h-5"></i></div><div><div class="text-[10px] text-purple-300">{skill.branch}</div><h4 class="font-black text-white">{skill.name}</h4></div></div><span class="text-xs font-black text-cyan-300">LV. {lv}/{skill.max}</span></div><p class="text-xs text-slate-400 mt-3">{skill.desc}</p><p class="text-[10px] text-emerald-300 mt-2">{skill.effect}</p><div class="flex gap-1 mt-3">{Array.from({length:skill.max},(_,i)=><div key={i} class={`h-1.5 flex-1 rounded-full ${i<lv?'bg-cyan-400 shadow-neon-blue':'bg-slate-800'}`}></div>)}</div><button disabled={maxed||player.manaCrystals<price} onClick={()=>buySkill(skill)} class={`w-full mt-4 rounded-lg py-2.5 text-xs font-black ${maxed?'bg-emerald-950 text-emerald-300':player.manaCrystals>=price?'bg-cyan-500 text-slate-950 hover:bg-cyan-300':'bg-slate-800 text-slate-500'}`}>{maxed?'✓ حداکثر سطح':`ارتقا • ${price} 💎`}</button></div>})}</div><div class="mt-4 rounded-xl border border-purple-500/30 bg-purple-950/20 p-3 text-xs text-slate-300">اثر مهارت‌های فعال: <b class="text-cyan-300">+{skillXPBonus}٪ XP سیاه‌چال</b> و <b class="text-amber-300">+{skillCrystalBonus}٪ سنگ مانا</b>. مهارت‌های باس‌فایت نیز هنگام ثبت نتیجه، پاداش همان نبرد را افزایش می‌دهند.</div></section>}
+                {tab==='boss' && <section class="system-panel rounded-2xl p-5"><div class="text-[10px] text-red-300 font-black">GATE CLASS // EXAMINATION</div><h3 class="text-xl font-black text-white mt-1">ورود به میدان باس‌فایت</h3><p class="text-xs text-slate-400 mt-2 mb-4">پس از یک آزمون یا مجموعه تمرین، نتیجه واقعی خودت را ثبت کن. پاداش بر اساس دقت و زمان تلاش محاسبه می‌شود؛ این بخش آزمون را خودکار تصحیح نمی‌کند.</p><div class="grid grid-cols-1 sm:grid-cols-2 gap-3"><label class="text-xs text-slate-300">درس<input value={subject} onChange={e=>setSubject(e.target.value)} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label><label class="text-xs text-slate-300">نام آزمون<input value={examTitle} onChange={e=>setExamTitle(e.target.value)} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label><label class="text-xs text-slate-300">تعداد کل سؤال<input type="number" min="1" max="200" value={total} onChange={e=>setTotal(e.target.value)} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label><label class="text-xs text-slate-300">پاسخ صحیح<input type="number" min="0" max="200" value={correct} onChange={e=>setCorrect(e.target.value)} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label><label class="text-xs text-slate-300 sm:col-span-2">مدت آزمون (دقیقه)<input type="number" min="1" max="600" value={minutes} onChange={e=>setMinutes(e.target.value)} class="block w-full mt-1 bg-slate-950 border border-slate-700 rounded-lg p-3"/></label></div><button onClick={submitBoss} class="w-full mt-4 rounded-xl bg-gradient-to-r from-red-600 to-purple-600 py-3 text-white font-black shadow-neon-red">ثبت نتیجه و دریافت پاداش</button><div class="mt-5 border-t border-slate-800 pt-4"><div class="flex items-center justify-between"><h4 class="font-black text-white text-sm">گزارش نبردهای قبلی</h4><span class="text-[10px] text-slate-500">{bossHistory.length} RECORDS</span></div>{bossHistory.length?<div class="space-y-2 mt-3 max-h-72 overflow-y-auto">{bossHistory.map(b=><div key={b.id} class="rounded-lg bg-slate-950 border border-slate-800 p-3 flex items-center justify-between gap-3"><div><div class="text-xs font-bold text-white">{b.title} • {b.subject}</div><div class="text-[10px] text-slate-500 mt-1">{b.date} • {b.correct}/{b.total} پاسخ صحیح • {b.minutes} دقیقه</div></div><div class="text-left"><div class="font-black text-cyan-300">{b.accuracy}٪</div><div class="text-[10px] text-amber-300">+{b.xp} XP</div></div></div>)}</div>:<p class="text-xs text-slate-600 text-center py-5">هنوز نبردی ثبت نشده است.</p>}</div></section>}
+                <p class="text-[10px] text-slate-600 text-center">پاداش‌ها صرفاً امتیازهای درون بازی هستند؛ نتیجه آزمون و میزان یادگیری را صادقانه ثبت کن.</p>
+            </div>;
+        }
+
+        // ==========================================
+        // 7. COMMAND CENTER / STORY CAMPAIGN
+        // ==========================================
+        function CommandCenterTab({ player, studySessions, campaign, setCampaign, addXPAndCrystals, addNotification, addLog, triggerSound }) {
+            const chapters = [
+                { id: 'awakening', code: 'PROLOGUE', title: 'بیداری شکارچی', subtitle: 'آغاز مسیر و ساختن نظم شخصی', rank: 'E', tasks: [
+                    { id: 'a1', title: 'اولین سیاه‌چال مطالعه را کامل کن', hint: 'یک جلسه تمرکز کامل' },
+                    { id: 'a2', title: 'سه مأموریت روزانه را انجام بده', hint: 'ساختن ریتم روزانه' },
+                    { id: 'a3', title: 'یک ویژگی وضعیت را ارتقا بده', hint: 'تخصیص امتیاز وضعیت' }
+                ], reward: { xp: 100, crystals: 50 } },
+                { id: 'double', code: 'CHAPTER 01', title: 'آزمون تغییر', subtitle: 'عبور از سطح مبتدی و تثبیت عادت مطالعه', rank: 'D', tasks: [
+                    { id: 'b1', title: 'پنج جلسه مطالعه ثبت کن', hint: 'پنج سیاه‌چال پاکسازی‌شده' },
+                    { id: 'b2', title: 'یک سرباز سایه استخراج کن', hint: 'پس از پاکسازی یک سیاه‌چال' },
+                    { id: 'b3', title: 'یک مأموریت اصلی را تکمیل کن', hint: 'از تابلو مأموریت‌ها' }
+                ], reward: { xp: 180, crystals: 90 } },
+                { id: 'redgate', code: 'CHAPTER 02', title: 'دروازه سرخ', subtitle: 'افزایش استقامت و عبور از چالش‌های سخت', rank: 'C', tasks: [
+                    { id: 'c1', title: 'مجموعاً ۳۰۰ دقیقه مطالعه ثبت کن', hint: 'زمان ثبت‌شده در سیاه‌چال‌ها' },
+                    { id: 'c2', title: 'یک سایه را به سطح ۵ برسان', hint: 'ارتقای سرباز سایه' },
+                    { id: 'c3', title: 'سه مأموریت رتبه B یا بالاتر تکمیل کن', hint: 'چالش‌های جدی‌تر' }
+                ], reward: { xp: 300, crystals: 150 } },
+                { id: 'monarch', code: 'FINAL CHAPTER', title: 'وارث پادشاه سایه‌ها', subtitle: 'تبدیل پیشرفت روزانه به قدرت پایدار', rank: 'S', tasks: [
+                    { id: 'd1', title: 'مجموعاً ۱۲۰۰ دقیقه مطالعه ثبت کن', hint: '۲۰ ساعت تمرکز واقعی' },
+                    { id: 'd2', title: 'به سطح ۱۵ بازیکن برس', hint: 'ادامه مسیر ارتقای سطح' },
+                    { id: 'd3', title: 'تمام فصل‌های قبلی را تکمیل کن', hint: 'تکمیل کمپین' }
+                ], reward: { xp: 600, crystals: 300 } }
+            ];
+            const totalMinutes = studySessions.reduce((sum, s) => sum + (s.minutes || 0), 0);
+            const weekAgo = Date.now() - 7 * 24 * 60 * 60 * 1000;
+            const weekly = studySessions.filter(s => new Date(s.date).getTime() >= weekAgo);
+            const weeklyMinutes = weekly.reduce((sum, s) => sum + (s.minutes || 0), 0);
+            const subjects = Object.entries(weekly.reduce((acc, s) => {
+                acc[s.subject] = (acc[s.subject] || 0) + s.minutes;
+                return acc;
+            }, {})).sort((a, b) => b[1] - a[1]).slice(0, 5);
+            const doneCount = chapters.reduce((sum, ch) => sum + ch.tasks.filter(t => campaign[t.id]).length, 0);
+            const taskCount = chapters.reduce((sum, ch) => sum + ch.tasks.length, 0);
+
+            const toggleTask = (task, chapter) => {
+                if (campaign[task.id]) return;
+                const next = { ...campaign, [task.id]: true };
+                setCampaign(next);
+                triggerSound('complete');
+                addLog(`هدف داستانی تکمیل شد: ${task.title}`, 'success');
+                const chapterDone = chapter.tasks.every(t => next[t.id]);
+                if (chapterDone && !campaign['reward_' + chapter.id]) {
+                    setCampaign(prev => ({ ...prev, ...next, ['reward_' + chapter.id]: true }));
+                    addXPAndCrystals(chapter.reward.xp, chapter.reward.crystals);
+                    addNotification('[فصل پاکسازی شد]', `پاداش فصل ${chapter.code} دریافت شد.`, 'monarch');
+                } else {
+                    addNotification('[پیشرفت کمپین]', 'یک هدف داستانی ثبت شد. مسیر ادامه دارد.', 'success');
+                }
+            };
+
+            return (
+                <div class="space-y-6">
+                    <section class="monarch-panel rounded-3xl p-6 md:p-8 relative overflow-hidden">
+                        <div class="absolute -left-12 -top-16 w-64 h-64 rounded-full bg-purple-600/15 blur-3xl pointer-events-none"></div>
+                        <div class="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+                            <div>
+                                <div class="text-[10px] tracking-[.28em] text-purple-300 font-black mb-2">SHADOW MONARCH // COMMAND CENTER</div>
+                                <h2 class="text-2xl md:text-3xl font-black text-white glow-text-monarch">اتاق فرمان پادشاه</h2>
+                                <p class="text-sm text-slate-300 mt-2 max-w-2xl">پیشرفت واقعی تو اینجا ثبت می‌شود؛ هر جلسه کامل‌شده، بخشی از پرونده شکارچی و مسیر داستانی تو را می‌سازد.</p>
+                            </div>
+                            <div class="grid grid-cols-2 gap-3 min-w-[220px]">
+                                <div class="bg-black/35 border border-purple-400/30 rounded-2xl p-3 text-center">
+                                    <div class="text-[10px] text-purple-200">LEVEL</div>
+                                    <div class="text-3xl font-black text-white">{player.level}</div>
+                                </div>
+                                <div class="bg-black/35 border border-purple-400/30 rounded-2xl p-3 text-center">
+                                    <div class="text-[10px] text-purple-200">CAMPAIGN</div>
+                                    <div class="text-3xl font-black text-fuchsia-300">{Math.round(doneCount / taskCount * 100)}%</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-6 h-2 bg-black/50 rounded-full overflow-hidden border border-purple-400/20">
+                            <div class="h-full bg-gradient-to-r from-purple-700 via-fuchsia-500 to-cyan-300 rounded-full transition-all" style={{width: `${doneCount / taskCount * 100}%`}}></div>
+                        </div>
+                        <div class="flex justify-between text-[10px] text-purple-200 mt-2"><span>پیشرفت داستان</span><span>{doneCount} / {taskCount} هدف</span></div>
+                    </section>
+
+                    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <div class="system-panel rounded-2xl p-4"><div class="text-xs text-slate-400">کل زمان ثبت‌شده</div><div class="text-2xl font-black text-cyan-300 mt-1">{Math.floor(totalMinutes / 60)} <span class="text-xs">ساعت</span> {totalMinutes % 60} <span class="text-xs">دقیقه</span></div></div>
+                        <div class="system-panel rounded-2xl p-4"><div class="text-xs text-slate-400">هفت روز اخیر</div><div class="text-2xl font-black text-purple-300 mt-1">{Math.floor(weeklyMinutes / 60)} <span class="text-xs">ساعت</span> {weeklyMinutes % 60} <span class="text-xs">دقیقه</span></div></div>
+                        <div class="system-panel rounded-2xl p-4"><div class="text-xs text-slate-400">سیاه‌چال‌های پاکسازی‌شده</div><div class="text-2xl font-black text-amber-300 mt-1">{studySessions.length}</div></div>
+                    </section>
+
+                    <section class="system-panel rounded-2xl p-5">
+                        <div class="flex items-center justify-between gap-3 mb-4"><h3 class="font-black text-cyan-200">نقشه حرارتی تمرکز هفتگی</h3><span class="text-[10px] text-slate-500">۷ روز اخیر • بر اساس جلسات کامل</span></div>
+                        <div class="grid grid-cols-7 gap-2">
+                            {Array.from({length: 7}, (_, i) => {
+                                const day = new Date(); day.setHours(0,0,0,0); day.setDate(day.getDate() - (6-i));
+                                const mins = weekly.filter(s => new Date(s.date).toDateString() === day.toDateString()).reduce((sum,s) => sum+s.minutes,0);
+                                return <div key={i} class="text-center">
+                                    <div class={`h-14 rounded-xl border flex items-center justify-center text-xs font-black ${mins >= 90 ? 'bg-purple-500/35 border-purple-300 text-purple-100' : mins >= 45 ? 'bg-purple-900/60 border-purple-700 text-purple-200' : mins > 0 ? 'bg-purple-950/70 border-purple-900 text-purple-300' : 'bg-slate-950 border-slate-800 text-slate-600'}`}>{mins ? mins + "'" : '—'}</div>
+                                    <div class="text-[10px] text-slate-500 mt-2">{['ش','ی','د','س','چ','پ','ج'][day.getDay() === 6 ? 0 : day.getDay()+1] || '•'}</div>
+                                </div>;
+                            })}
+                        </div>
+                    </section>
+
+                    <section class="grid grid-cols-1 lg:grid-cols-5 gap-5">
+                        <div class="lg:col-span-3 space-y-3">
+                            <div class="flex items-center justify-between"><h3 class="font-black text-purple-200">خط داستانی شکارچی</h3><span class="text-[10px] text-slate-500">STORY MISSIONS</span></div>
+                            {chapters.map((ch, index) => {
+                                const completed = ch.tasks.filter(t => campaign[t.id]).length;
+                                const unlocked = index === 0 || chapters[index-1].tasks.every(t => campaign[t.id]);
+                                return <div key={ch.id} class={`rounded-2xl border p-4 ${unlocked ? 'bg-slate-950/75 border-purple-500/35' : 'bg-slate-950/35 border-slate-800 opacity-60'}`}>
+                                    <div class="flex justify-between items-start gap-3 mb-3">
+                                        <div><div class="text-[9px] tracking-widest text-purple-400 font-black">{ch.code} • RANK {ch.rank}</div><h4 class="font-black text-white mt-1">{ch.title}</h4><p class="text-[11px] text-slate-400 mt-1">{ch.subtitle}</p></div>
+                                        <div class="text-xs font-black text-purple-200">{completed}/{ch.tasks.length}</div>
+                                    </div>
+                                    <div class="space-y-2">
+                                        {ch.tasks.map(task => <button key={task.id} disabled={!unlocked || !!campaign[task.id]} onClick={() => toggleTask(task,ch)} class={`w-full text-right rounded-xl border p-3 flex items-center gap-3 ${campaign[task.id] ? 'bg-emerald-950/30 border-emerald-800/60' : unlocked ? 'bg-slate-900/70 border-slate-800 hover:border-purple-500/60' : 'bg-slate-950 border-slate-900'}`}>
+                                            <span class={`w-5 h-5 shrink-0 rounded-md border flex items-center justify-center ${campaign[task.id] ? 'bg-emerald-500 border-emerald-400 text-black' : 'border-slate-600'}`}>{campaign[task.id] ? '✓' : ''}</span>
+                                            <span class="flex-1"><span class={`block text-xs font-bold ${campaign[task.id] ? 'text-emerald-300 line-through' : 'text-slate-200'}`}>{task.title}</span><span class="block text-[10px] text-slate-500 mt-1">{task.hint}</span></span>
+                                            <span class="text-[9px] text-slate-500">{campaign[task.id] ? 'ثبت شد' : unlocked ? 'ثبت هدف' : 'قفل'}</span>
+                                        </button>)}
+                                    </div>
+                                    <div class="mt-3 flex items-center justify-between text-[10px]"><span class="text-slate-500">پاداش فصل: +{ch.reward.xp} XP / 💎 {ch.reward.crystals}</span><span class={campaign['reward_' + ch.id] ? 'text-emerald-400' : 'text-purple-300'}>{campaign['reward_' + ch.id] ? 'پاداش دریافت شد' : unlocked ? 'در دسترس' : 'قفل شده'}</span></div>
+                                </div>;
+                            })}
+                        </div>
+                        <div class="lg:col-span-2">
+                            <div class="system-panel rounded-2xl p-5 h-full">
+                                <div class="flex items-center justify-between mb-4"><h3 class="font-black text-cyan-200">تحلیل دروس</h3><i data-lucide="chart-no-axes-column-increasing" class="w-4 h-4 text-cyan-300"></i></div>
+                                {subjects.length ? <div class="space-y-4">{subjects.map(([subject, mins]) => <div key={subject}><div class="flex justify-between text-xs mb-1"><span class="text-slate-200">{subject}</span><span class="text-cyan-300 font-bold">{mins} دقیقه</span></div><div class="h-2 bg-slate-950 rounded-full overflow-hidden"><div class="h-full bg-gradient-to-r from-cyan-700 to-purple-400 rounded-full" style={{width: `${Math.max(4, mins / Math.max(...subjects.map(x=>x[1])) * 100)}%`}}></div></div></div>)}</div> : <div class="text-xs text-slate-500 leading-7 py-5">هنوز جلسه‌ای ثبت نشده است. پس از تکمیل اولین سیاه‌چال، تحلیل زمان مطالعه و تفکیک دروس اینجا نمایش داده می‌شود.</div>}
+                                <div class="border-t border-slate-800 mt-5 pt-4 text-[10px] text-slate-500 leading-6">نکته: گزارش‌ها فقط جلسات سیاه‌چالِ کامل‌شده را حساب می‌کنند؛ زمان جلسات نیمه‌تمام در آمار ثبت نمی‌شود.</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
+        }
+
+        // ==========================================
+        // 8. SYSTEM LOGS TAB
+        // ==========================================
+        function SystemLogsTab({ logs }) {
+            return (
+                <div class="system-panel rounded-2xl p-6">
+                    <h3 class="text-lg font-black text-cyan-300 mb-4 flex items-center gap-2">
+                        <i data-lucide="terminal" class="w-5 h-5"></i>
+                        تاریخچه و گزارش‌های سیستم (System Logs)
+                    </h3>
+                    <div class="bg-slate-950/90 rounded-xl p-4 border border-slate-800 max-h-96 overflow-y-auto space-y-2.5 font-mono text-xs">
+                        {logs.map(log => (
+                            <div key={log.id} class="flex items-start gap-3 border-b border-slate-900 pb-2">
+                                <span class="text-slate-500 shrink-0">[{log.time}]</span>
+                                <span class={
+                                    log.type === 'arise' ? 'text-purple-400 font-bold' :
+                                    log.type === 'levelup' ? 'text-amber-300 font-bold' :
+                                    log.type === 'warning' ? 'text-red-400' :
+                                    log.type === 'success' ? 'text-emerald-400' :
+                                    'text-cyan-300'
+                                }>
+                                    {log.text}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            );
+        }
+
+        ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+    </script>
+</body>
+</html>
